@@ -1,5 +1,5 @@
 {
-	"version": "4.0",
+	"version": "5.0",
 	"coreCount": 15,
 	"optionalLimit": 25,
 	"categories": {
@@ -72,10 +72,10 @@
 			"id": "C01",
 			"phase": "core",
 			"type": "single",
-			"question": "You receive one extraordinary power. What would you most want to do with it?",
+			"question": "You could be known for one extraordinary talent. What would you choose?",
 			"answers": [
 				{
-					"text": "Become one formidable champion who can take on anyone.",
+					"text": "Being exceptionally powerful at one thing.",
 					"scores": {
 						"voltron": 3,
 						"commander_damage": 2,
@@ -83,7 +83,7 @@
 					}
 				},
 				{
-					"text": "Lead a huge force whose members strengthen one another.",
+					"text": "Leading a big group that gets better together.",
 					"scores": {
 						"tokens": 3,
 						"typal": 2,
@@ -91,14 +91,14 @@
 					}
 				},
 				{
-					"text": "Combine magical abilities into unexpected results.",
+					"text": "Combining unrelated skills into something surprising.",
 					"scores": {
 						"combo": 3,
 						"spellslinger": 2
 					}
 				},
 				{
-					"text": "Stop threats and decide what others can do.",
+					"text": "Seeing problems coming and deciding how situations unfold.",
 					"scores": {
 						"control": 3,
 						"interaction": 2
@@ -110,31 +110,31 @@
 			"id": "C02",
 			"phase": "core",
 			"type": "rank",
-			"question": "Rank what you would prioritize before a difficult battle.",
+			"question": "You are planning a weekend with friends. Rank what you would focus on first.",
 			"answers": [
 				{
-					"text": "Strike early and keep up pressure.",
+					"text": "Get things moving and make plans right away.",
 					"scores": {
 						"aggro": 3,
 						"fast_pace": 2
 					}
 				},
 				{
-					"text": "Build reliable resources and become stronger over time.",
+					"text": "Work out a reliable plan with plenty to do.",
 					"scores": {
 						"midrange": 3,
 						"consistency": 2
 					}
 				},
 				{
-					"text": "Prepare responses to an opponent’s plans.",
+					"text": "Anticipate problems and prepare alternatives.",
 					"scores": {
 						"control": 3,
 						"interaction": 2
 					}
 				},
 				{
-					"text": "Assemble a plan with a spectacular payoff.",
+					"text": "Plan one unforgettable surprise as the highlight.",
 					"scores": {
 						"combo": 3,
 						"setup": 2
@@ -159,31 +159,31 @@
 			"id": "C04",
 			"phase": "core",
 			"type": "single",
-			"question": "A favorite ally has been defeated. What would feel most satisfying?",
+			"question": "A project you cared about unexpectedly falls apart. What would be the most satisfying response?",
 			"answers": [
 				{
-					"text": "Bring them back to fight again.",
+					"text": "Restore the parts that worked and try again.",
 					"scores": {
 						"graveyard": 3,
 						"resilience": 2
 					}
 				},
 				{
-					"text": "Get rewarded because they were defeated.",
+					"text": "Find a way for the setback itself to become useful.",
 					"scores": {
 						"sacrifice": 3,
 						"life_drain": 1
 					}
 				},
 				{
-					"text": "Protect the rest of my team and adjust.",
+					"text": "Secure what remains and adapt the plan.",
 					"scores": {
 						"control": 1,
 						"resilience": 3
 					}
 				},
 				{
-					"text": "Attack immediately to avenge them.",
+					"text": "Come back with something bigger and more ambitious.",
 					"scores": {
 						"aggro": 2,
 						"combat": 2
@@ -231,44 +231,45 @@
 			"id": "C06",
 			"phase": "core",
 			"type": "scale",
-			"question": "How much do you enjoy having opportunities to interfere with an opponent’s plans?",
+			"question": "How much do you enjoy responding to other people’s plans rather than focusing only on your own?",
 			"min": 1,
 			"max": 10,
 			"scores": {
-				"interaction": 3
+				"interaction": 3,
+				"low_interaction": -3
 			},
-			"left": "I prefer my own plan",
-			"right": "I love interfering"
+			"left": "Prefer my own plans",
+			"right": "Love reacting to others"
 		},
 		{
 			"id": "C07",
 			"phase": "core",
 			"type": "single",
-			"question": "You have a limited amount of power to spend this turn. Which use appeals most?",
+			"question": "You have one free afternoon and a limited budget. Which sounds most rewarding?",
 			"answers": [
 				{
-					"text": "Use it all now for one impactful move.",
+					"text": "Spend it on one amazing experience right now.",
 					"scores": {
 						"aggro": 2,
 						"burst": 3
 					}
 				},
 				{
-					"text": "Spend it on several improvements that add up later.",
+					"text": "Make a few smaller purchases or improvements that will last.",
 					"scores": {
 						"midrange": 3,
 						"value_engine": 2
 					}
 				},
 				{
-					"text": "Keep some in reserve in case something goes wrong.",
+					"text": "Keep some money aside in case plans change.",
 					"scores": {
 						"control": 2,
 						"consistency": 2
 					}
 				},
 				{
-					"text": "Invest in a specific payoff that could become amazing later.",
+					"text": "Save it toward a very specific dream purchase.",
 					"scores": {
 						"setup": 3,
 						"combo": 2
@@ -352,44 +353,46 @@
 			"id": "C10",
 			"phase": "core",
 			"type": "scale",
-			"question": "How much would you enjoy keeping track of several abilities that trigger and interact with one another?",
+			"question": "How much would you enjoy managing lots of abilities that interact with each other?",
 			"min": 1,
 			"max": 10,
 			"scores": {
-				"engine_complexity": 3
+				"engine_complexity": 3,
+				"complexity": 2,
+				"low_complexity": -2
 			},
-			"left": "Not enjoyable",
-			"right": "Really enjoyable"
+			"left": "Prefer simple systems",
+			"right": "Love intricate systems"
 		},
 		{
 			"id": "C11",
 			"phase": "core",
 			"type": "single",
-			"question": "Someone seems impossible to beat in a fair fight. What would you try?",
+			"question": "Your group has a problem that nobody can solve by the obvious method. What would you do?",
 			"answers": [
 				{
-					"text": "Use their best resource against them.",
+					"text": "Borrow an idea or tool from someone who is doing well.",
 					"scores": {
 						"theft": 3,
 						"interaction": 1
 					}
 				},
 				{
-					"text": "Take apart the resources supporting their strategy.",
+					"text": "Figure out which parts of the problem can be removed.",
 					"scores": {
 						"disruption": 3,
 						"attrition": 1
 					}
 				},
 				{
-					"text": "Convince another player to help me.",
+					"text": "Get other people on board to solve it together.",
 					"scores": {
 						"politics": 3,
 						"social": 2
 					}
 				},
 				{
-					"text": "Pursue an unusual objective that bypasses combat.",
+					"text": "Find a completely different goal that makes the problem irrelevant.",
 					"scores": {
 						"alternate_win": 3,
 						"combo_win": 1
@@ -437,14 +440,15 @@
 			"id": "C13",
 			"phase": "core",
 			"type": "scale",
-			"question": "How willing would you be to risk your current progress for a chance at a much bigger payoff?",
+			"question": "How willing are you to risk progress you already made for the chance at a much bigger reward?",
 			"min": 1,
 			"max": 10,
 			"scores": {
-				"high_risk": 3
+				"high_risk": 3,
+				"low_risk": -3
 			},
-			"left": "Not willing",
-			"right": "Very willing"
+			"left": "Prefer dependable progress",
+			"right": "Love big gambles"
 		},
 		{
 			"id": "C14",
@@ -487,17 +491,17 @@
 			"id": "C15",
 			"phase": "core",
 			"type": "single",
-			"question": "You are losing, but you have enough resources for one meaningful move. What do you prioritize?",
+			"question": "Something you have been working on is going badly, and you can make one meaningful change. What do you prioritize?",
 			"answers": [
 				{
-					"text": "Make the strongest move possible right now to turn things around.",
+					"text": "Make one bold move to turn everything around immediately.",
 					"scores": {
 						"burst": 3,
 						"aggro": 2
 					}
 				},
 				{
-					"text": "Recover what you lost and rebuild from there.",
+					"text": "Recover the best parts and rebuild steadily.",
 					"scores": {
 						"resilience": 3,
 						"graveyard": 1,
@@ -505,14 +509,14 @@
 					}
 				},
 				{
-					"text": "Keep your options open to stop the next dangerous move.",
+					"text": "Keep flexibility to respond to whatever goes wrong next.",
 					"scores": {
 						"control": 3,
 						"interaction": 2
 					}
 				},
 				{
-					"text": "Attempt an unlikely plan with a chance to win outright.",
+					"text": "Try a long-shot idea that could solve everything at once.",
 					"scores": {
 						"high_risk": 2,
 						"combo_win": 2,
@@ -589,29 +593,29 @@
 			"id": "O04",
 			"phase": "optional",
 			"type": "single",
-			"question": "Your group has survived a difficult fight. Which upgrade feels most rewarding?",
+			"question": "A hobby you have been practicing is finally improving. What progress would feel best?",
 			"answers": [
 				{
-					"text": "Make each survivor individually stronger.",
+					"text": "Each skill you already have keeps getting stronger.",
 					"scores": {
 						"counters": 3
 					}
 				},
 				{
-					"text": "Create reinforcements to replace losses.",
+					"text": "You can now do much more at once.",
 					"scores": {
 						"tokens": 3
 					}
 				},
 				{
-					"text": "Give everyone a bonus when teammates work together.",
+					"text": "Your different skills work better together.",
 					"scores": {
 						"typal": 3,
 						"synergy": 1
 					}
 				},
 				{
-					"text": "Make it much harder for your favorite ally to be defeated.",
+					"text": "Your favorite skill becomes incredibly reliable.",
 					"scores": {
 						"voltron": 2,
 						"resilience": 2
@@ -661,29 +665,29 @@
 			"id": "O06",
 			"phase": "optional",
 			"type": "single",
-			"question": "You unexpectedly get enough resources for something expensive. What do you do?",
+			"question": "You unexpectedly receive a generous gift card. What sounds most fun?",
 			"answers": [
 				{
-					"text": "Summon something huge that can attack.",
+					"text": "Buy one big, impressive thing you have wanted.",
 					"scores": {
 						"stompy": 3,
 						"combat": 1
 					}
 				},
 				{
-					"text": "Add several more creatures to the battlefield.",
+					"text": "Get lots of smaller things to enjoy together.",
 					"scores": {
 						"tokens": 3
 					}
 				},
 				{
-					"text": "Give your main fighter a permanent upgrade.",
+					"text": "Upgrade something you already love.",
 					"scores": {
 						"voltron": 3
 					}
 				},
 				{
-					"text": "Build an engine that keeps paying you back.",
+					"text": "Buy tools or supplies that make future projects easier.",
 					"scores": {
 						"value_engine": 3,
 						"midrange": 1
@@ -720,32 +724,34 @@
 			"id": "O09",
 			"phase": "optional",
 			"type": "single",
-			"question": "One of your actions can trigger a reward every turn. What reward do you want?",
+			"question": "You can have one benefit that repeats each week. Which would you enjoy most?",
 			"answers": [
 				{
-					"text": "Permanently strengthen a creature.",
+					"text": "Something that keeps improving the environment around me.",
 					"scores": {
-						"counters": 3
+						"enchantments": 3,
+						"counters": 1
 					}
 				},
 				{
-					"text": "Create a fresh ally.",
+					"text": "A growing supply of resources for future plans.",
 					"scores": {
-						"tokens": 3
+						"landfall": 3,
+						"midrange": 1
 					}
 				},
 				{
-					"text": "Draw more options to choose from.",
+					"text": "Quietly reducing the options available to my competition.",
 					"scores": {
-						"value_engine": 3,
-						"consistency": 1
+						"mill": 3,
+						"attrition": 1
 					}
 				},
 				{
-					"text": "Deal a little damage to each opponent.",
+					"text": "Turning things I no longer need into useful rewards.",
 					"scores": {
-						"life_drain": 2,
-						"burn": 1
+						"sacrifice": 3,
+						"life_drain": 1
 					}
 				}
 			]
@@ -895,30 +901,30 @@
 			"id": "O16",
 			"phase": "optional",
 			"type": "single",
-			"question": "Your carefully built strategy falls apart halfway through a game. What would you prefer?",
+			"question": "Halfway through a creative project, something goes wrong. Which backup would you prefer?",
 			"answers": [
 				{
-					"text": "Get my key pieces back from the graveyard.",
+					"text": "Recover the original work you thought was lost.",
 					"scores": {
 						"graveyard": 3,
 						"resilience": 1
 					}
 				},
 				{
-					"text": "Have plenty of backup cards available.",
+					"text": "Have spare materials ready to keep moving.",
 					"scores": {
 						"consistency": 3
 					}
 				},
 				{
-					"text": "Make opponents suffer for destroying my things.",
+					"text": "Turn the mistake into a useful new feature.",
 					"scores": {
 						"sacrifice": 2,
 						"life_drain": 2
 					}
 				},
 				{
-					"text": "Switch to a different plan with the resources I have.",
+					"text": "Change direction and make something else with what remains.",
 					"scores": {
 						"adaptability": 3,
 						"midrange": 1
@@ -975,28 +981,29 @@
 			"id": "O19",
 			"phase": "optional",
 			"type": "single",
-			"question": "If you could reuse the same type of resource again and again, which would be most interesting?",
+			"question": "What would you most like to be able to reuse as often as you want?",
 			"answers": [
 				{
-					"text": "Spells I have already cast.",
+					"text": "My favorite creative techniques.",
 					"scores": {
 						"spellslinger": 3
 					}
 				},
 				{
-					"text": "Creatures that were defeated.",
+					"text": "Projects I thought were finished or lost.",
 					"scores": {
 						"graveyard": 3
 					}
 				},
 				{
-					"text": "Abilities on objects and artifacts.",
+					"text": "Resources that grow each time I expand my plans.",
 					"scores": {
-						"artifacts": 3
+						"landfall": 3,
+						"value_engine": 1
 					}
 				},
 				{
-					"text": "Abilities of creatures that temporarily leave and return.",
+					"text": "The special contributions of people I work with.",
 					"scores": {
 						"blink": 3
 					}
@@ -1068,28 +1075,28 @@
 			"id": "O23",
 			"phase": "optional",
 			"type": "single",
-			"question": "An opponent has a valuable permanent. What would you rather do?",
+			"question": "Someone else has a big advantage in a friendly competition. What sounds most satisfying?",
 			"answers": [
 				{
-					"text": "Steal and use it",
+					"text": "Figure out how to use the same advantage yourself.",
 					"scores": {
 						"theft": 3
 					}
 				},
 				{
-					"text": "Destroy it",
+					"text": "Remove the advantage so things are more even.",
 					"scores": {
 						"disruption": 3
 					}
 				},
 				{
-					"text": "Temporarily stop it from working",
+					"text": "Temporarily make the advantage irrelevant.",
 					"scores": {
 						"control": 3
 					}
 				},
 				{
-					"text": "Ignore it and improve my own board",
+					"text": "Focus on improving your own performance instead.",
 					"scores": {
 						"midrange": 3
 					}
@@ -1148,31 +1155,32 @@
 			"id": "O26",
 			"phase": "optional",
 			"type": "single",
-			"question": "Attacking directly is not working. What sounds like the best alternate plan?",
+			"question": "A usual approach to a challenge stops working. What alternative would you try?",
 			"answers": [
 				{
-					"text": "Keep gathering resources until my board is stronger.",
+					"text": "Make your strongest existing approach even stronger.",
 					"scores": {
-						"midrange": 3
+						"stompy": 2,
+						"combat": 2
 					}
 				},
 				{
-					"text": "Make every action slowly drain the opponent’s life.",
+					"text": "Achieve small wins while maintaining your own energy.",
 					"scores": {
-						"life_drain": 3
+						"life_drain": 3,
+						"lifegain": 1
 					}
 				},
 				{
-					"text": "Chase a special win condition that ignores combat.",
+					"text": "Gradually reduce the other side’s future options.",
+					"scores": {
+						"mill": 3
+					}
+				},
+				{
+					"text": "Find a unique objective that bypasses the obstacle.",
 					"scores": {
 						"alternate_win": 3
-					}
-				},
-				{
-					"text": "Destroy their resources until defending is impossible.",
-					"scores": {
-						"attrition": 3,
-						"disruption": 1
 					}
 				}
 			]
@@ -1226,31 +1234,31 @@
 			"id": "O29",
 			"phase": "optional",
 			"type": "single",
-			"question": "What kind of action would you most enjoy punishing?",
+			"question": "Which behavior would you most want to discourage in a group game?",
 			"answers": [
 				{
-					"text": "An opponent attacking me.",
+					"text": "Someone constantly targeting you.",
 					"scores": {
 						"control": 2,
 						"resilience": 1
 					}
 				},
 				{
-					"text": "An opponent casting too many spells.",
+					"text": "Someone taking too many turns or actions in a row.",
 					"scores": {
 						"control": 2,
 						"disruption": 1
 					}
 				},
 				{
-					"text": "An opponent drawing lots of cards.",
+					"text": "Someone accumulating advantages without sharing opportunities.",
 					"scores": {
 						"disruption": 2,
 						"life_drain": 1
 					}
 				},
 				{
-					"text": "An opponent building a large army.",
+					"text": "Someone crowding everyone else out of the activity.",
 					"scores": {
 						"control": 2,
 						"burn": 1
@@ -1275,31 +1283,31 @@
 			"id": "O31",
 			"phase": "optional",
 			"type": "rank",
-			"question": "Rank what you care about most in a win.",
+			"question": "Rank what would make completing a difficult challenge feel best.",
 			"answers": [
 				{
-					"text": "Winning quickly",
+					"text": "Finish before anyone expects me to.",
 					"scores": {
 						"aggro": 3,
 						"fast_pace": 2
 					}
 				},
 				{
-					"text": "Winning reliably",
+					"text": "Know my approach was dependable the whole time.",
 					"scores": {
 						"consistency": 3,
 						"midrange": 1
 					}
 				},
 				{
-					"text": "Winning through a clever sequence",
+					"text": "Pull off a clever solution that took planning.",
 					"scores": {
 						"combo_win": 3,
 						"combo": 2
 					}
 				},
 				{
-					"text": "Winning after surviving a long struggle",
+					"text": "Persevere through setbacks and finally succeed.",
 					"scores": {
 						"attrition": 3,
 						"resilience": 1
@@ -1311,46 +1319,49 @@
 			"id": "O32",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How comfortable are you taking turns with many separate decisions and triggered abilities?",
+			"question": "How comfortable are you with turns involving lots of decisions and triggered abilities?",
 			"scores": {
-				"complexity": 3
+				"complexity": 3,
+				"low_complexity": -3,
+				"decision_density": 2
 			},
 			"min": 1,
 			"max": 10,
-			"left": "Not appealing",
-			"right": "Very appealing"
+			"left": "Prefer fewer decisions",
+			"right": "Enjoy tracking everything"
 		},
 		{
 			"id": "O33",
 			"phase": "optional",
 			"type": "single",
-			"question": "You can choose one reward for completing a difficult task. Which would you take?",
+			"question": "You can invest in one long-term personal project. Which approach sounds most rewarding?",
 			"answers": [
 				{
-					"text": "A modest reward I know I will receive.",
+					"text": "Make dependable progress through a repeatable routine.",
 					"scores": {
 						"consistency": 3,
-						"low_risk": 3
+						"value_engine": 1
 					}
 				},
 				{
-					"text": "A much larger reward that only works if my plan succeeds.",
+					"text": "Build layers of lasting improvements on what you have.",
 					"scores": {
-						"high_risk": 3,
-						"combo": 1
+						"enchantments": 3,
+						"synergy": 1
 					}
 				},
 				{
-					"text": "A flexible reward I can choose later once I know more.",
+					"text": "Expand resources so bigger projects become possible.",
 					"scores": {
-						"adaptability": 3
+						"landfall": 3,
+						"midrange": 1
 					}
 				},
 				{
-					"text": "An immediate reward that lets me take action again.",
+					"text": "Turn things you no longer need into fuel for the next step.",
 					"scores": {
-						"aggro": 2,
-						"fast_pace": 2
+						"sacrifice": 3,
+						"value_engine": 1
 					}
 				}
 			]
@@ -1359,14 +1370,16 @@
 			"id": "O34",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How frustrating would it be if your deck took several turns to get started?",
+			"question": "How frustrating is it when a deck needs several turns before it can do much?",
 			"min": 1,
 			"max": 10,
 			"scores": {
-				"startup_frustration": 3
+				"startup_frustration": 3,
+				"fast_pace": 2,
+				"slow_pace": -3
 			},
-			"left": "Not frustrating",
-			"right": "Very frustrating"
+			"left": "Patient starts are fine",
+			"right": "I want action quickly"
 		},
 		{
 			"id": "O35",
@@ -1408,30 +1421,30 @@
 			"id": "O36",
 			"phase": "optional",
 			"type": "single",
-			"question": "A player offers a temporary alliance. What would you do?",
+			"question": "You and a friend are organizing an event together. How would you prefer to collaborate?",
 			"answers": [
 				{
-					"text": "Accept if we share an immediate goal.",
+					"text": "Team up immediately if we want the same outcome.",
 					"scores": {
 						"politics": 2,
 						"social": 2
 					}
 				},
 				{
-					"text": "Negotiate exactly what each of us gets.",
+					"text": "Agree on exactly what each of us will handle.",
 					"scores": {
 						"politics": 3,
 						"negotiation": 2
 					}
 				},
 				{
-					"text": "Decline; I want to focus on my own plan.",
+					"text": "Work independently and combine our work at the end.",
 					"scores": {
 						"low_interaction": 3
 					}
 				},
 				{
-					"text": "Agree only if it stops the strongest player.",
+					"text": "Change roles depending on who needs the most help.",
 					"scores": {
 						"control": 1,
 						"adaptability": 2
@@ -1490,29 +1503,29 @@
 			"id": "O39",
 			"phase": "optional",
 			"type": "single",
-			"question": "What kind of deck would be most satisfying to improve at over time?",
+			"question": "Which kind of hobby would you most enjoy getting better at?",
 			"answers": [
 				{
-					"text": "One that does the same job reliably, and I learn to execute it well.",
+					"text": "One where practice leads to reliable, repeatable progress.",
 					"scores": {
 						"consistency": 3
 					}
 				},
 				{
-					"text": "One that can switch between several plans.",
+					"text": "One where you can try many different approaches.",
 					"scores": {
 						"adaptability": 3
 					}
 				},
 				{
-					"text": "One with surprising and unpredictable outcomes.",
+					"text": "One where unexpected surprises keep things interesting.",
 					"scores": {
 						"high_risk": 2,
 						"combo": 1
 					}
 				},
 				{
-					"text": "One where precise timing changes everything.",
+					"text": "One where timing and reading other people matter most.",
 					"scores": {
 						"interaction": 2,
 						"control": 1
@@ -1524,45 +1537,46 @@
 			"id": "O40",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How appealing is carefully timing plays around what your opponents are doing?",
+			"question": "How much do you enjoy choosing when to act based on what other players do?",
 			"scores": {
-				"interaction": 3,
-				"control": 1
+				"interaction": 2,
+				"low_interaction": -2,
+				"reactive_dependency": 2
 			},
 			"min": 1,
 			"max": 10,
-			"left": "Not appealing",
-			"right": "Very appealing"
+			"left": "Prefer my own timing",
+			"right": "Love responding to others"
 		},
 		{
 			"id": "O41",
 			"phase": "optional",
 			"type": "single",
-			"question": "At a multiplayer table, what role sounds most fun?",
+			"question": "In a group activity, which role sounds most fun?",
 			"answers": [
 				{
-					"text": "Being the obvious threat everyone must answer.",
+					"text": "Take the lead and be the person everyone notices.",
 					"scores": {
 						"stompy": 2,
 						"aggro": 1
 					}
 				},
 				{
-					"text": "Staying unnoticed until my plan comes together.",
+					"text": "Quietly work toward a surprise reveal.",
 					"scores": {
 						"setup": 3,
 						"combo": 1
 					}
 				},
 				{
-					"text": "Negotiating and making temporary allies.",
+					"text": "Bring everyone together and help people cooperate.",
 					"scores": {
 						"politics": 3,
 						"social": 2
 					}
 				},
 				{
-					"text": "Keeping dangerous opponents in check.",
+					"text": "Keep things organized and step in when problems appear.",
 					"scores": {
 						"control": 3,
 						"interaction": 1
@@ -1613,34 +1627,35 @@
 			"id": "O45",
 			"phase": "optional",
 			"type": "single",
-			"question": "Which part of a difficult game would frustrate you most?",
+			"question": "When learning a new activity, which would frustrate you most?",
 			"answers": [
 				{
-					"text": "My creatures feel too weak to matter",
+					"text": "Feeling like my efforts barely have an impact.",
 					"scores": {
 						"stompy": 2,
 						"combat": 1
 					}
 				},
 				{
-					"text": "I keep losing everything I build",
+					"text": "Having to redo progress I already made.",
 					"scores": {
 						"resilience": 3
 					}
 				},
 				{
-					"text": "I have too many interactions to remember",
+					"text": "Trying to remember too many rules at once.",
 					"scores": {
 						"low_complexity": 3
 					}
 				},
 				{
-					"text": "I spend too long waiting to do anything",
+					"text": "Waiting too long before I get to do anything fun.",
 					"scores": {
 						"fast_pace": 3
 					}
 				}
 			]
 		}
-	]
+	],
+	"calibrationRevision": "v5-generic-draft"
 }

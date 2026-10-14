@@ -1,0 +1,1646 @@
+{
+	"version": "4.0",
+	"coreCount": 15,
+	"optionalLimit": 25,
+	"categories": {
+		"Strategy": [
+			"aggro",
+			"midrange",
+			"control",
+			"combo"
+		],
+		"Mechanics": [
+			"stompy",
+			"tokens",
+			"counters",
+			"voltron",
+			"graveyard",
+			"sacrifice",
+			"spellslinger",
+			"artifacts",
+			"enchantments",
+			"politics",
+			"disruption",
+			"theft",
+			"typal",
+			"lifegain",
+			"landfall",
+			"blink",
+			"value_engine",
+			"synergy"
+		],
+		"Win Conditions": [
+			"combat",
+			"commander_damage",
+			"life_drain",
+			"burn",
+			"combo_win",
+			"attrition",
+			"mill",
+			"alternate_win"
+		],
+		"Preferences": [
+			"fast_pace",
+			"slow_pace",
+			"interaction",
+			"low_interaction",
+			"complexity",
+			"low_complexity",
+			"high_risk",
+			"low_risk",
+			"consistency",
+			"resilience",
+			"social",
+			"negotiation",
+			"adaptability",
+			"burst",
+			"setup",
+			"board_complexity",
+			"decision_density",
+			"engine_complexity",
+			"growth_preference",
+			"loss_creatures",
+			"loss_early",
+			"loss_options",
+			"loss_setup",
+			"reactive_dependency",
+			"startup_frustration"
+		]
+	},
+	"questions": [
+		{
+			"id": "C01",
+			"phase": "core",
+			"type": "single",
+			"question": "You receive one extraordinary power. What would you most want to do with it?",
+			"answers": [
+				{
+					"text": "Become one formidable champion who can take on anyone.",
+					"scores": {
+						"voltron": 3,
+						"commander_damage": 2,
+						"combat": 2
+					}
+				},
+				{
+					"text": "Lead a huge force whose members strengthen one another.",
+					"scores": {
+						"tokens": 3,
+						"typal": 2,
+						"counters": 1
+					}
+				},
+				{
+					"text": "Combine magical abilities into unexpected results.",
+					"scores": {
+						"combo": 3,
+						"spellslinger": 2
+					}
+				},
+				{
+					"text": "Stop threats and decide what others can do.",
+					"scores": {
+						"control": 3,
+						"interaction": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "C02",
+			"phase": "core",
+			"type": "rank",
+			"question": "Rank what you would prioritize before a difficult battle.",
+			"answers": [
+				{
+					"text": "Strike early and keep up pressure.",
+					"scores": {
+						"aggro": 3,
+						"fast_pace": 2
+					}
+				},
+				{
+					"text": "Build reliable resources and become stronger over time.",
+					"scores": {
+						"midrange": 3,
+						"consistency": 2
+					}
+				},
+				{
+					"text": "Prepare responses to an opponent’s plans.",
+					"scores": {
+						"control": 3,
+						"interaction": 2
+					}
+				},
+				{
+					"text": "Assemble a plan with a spectacular payoff.",
+					"scores": {
+						"combo": 3,
+						"setup": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "C03",
+			"phase": "core",
+			"type": "scale",
+			"question": "How satisfying is it to watch something you built gradually grow stronger?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"growth_preference": 3
+			},
+			"left": "Not satisfying",
+			"right": "Extremely satisfying"
+		},
+		{
+			"id": "C04",
+			"phase": "core",
+			"type": "single",
+			"question": "A favorite ally has been defeated. What would feel most satisfying?",
+			"answers": [
+				{
+					"text": "Bring them back to fight again.",
+					"scores": {
+						"graveyard": 3,
+						"resilience": 2
+					}
+				},
+				{
+					"text": "Get rewarded because they were defeated.",
+					"scores": {
+						"sacrifice": 3,
+						"life_drain": 1
+					}
+				},
+				{
+					"text": "Protect the rest of my team and adjust.",
+					"scores": {
+						"control": 1,
+						"resilience": 3
+					}
+				},
+				{
+					"text": "Attack immediately to avenge them.",
+					"scores": {
+						"aggro": 2,
+						"combat": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "C05",
+			"phase": "core",
+			"type": "rank",
+			"question": "Put these projects in order from most interesting to least interesting.",
+			"answers": [
+				{
+					"text": "Build a team of creatures that becomes powerful together.",
+					"scores": {
+						"typal": 3,
+						"tokens": 1
+					}
+				},
+				{
+					"text": "Create lasting magical effects that improve everything you do.",
+					"scores": {
+						"enchantments": 3,
+						"value_engine": 1
+					}
+				},
+				{
+					"text": "Connect inventions that give each other new abilities.",
+					"scores": {
+						"artifacts": 3,
+						"value_engine": 1
+					}
+				},
+				{
+					"text": "Expand your territory to produce more resources over time.",
+					"scores": {
+						"landfall": 3,
+						"midrange": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "C06",
+			"phase": "core",
+			"type": "scale",
+			"question": "How much do you enjoy having opportunities to interfere with an opponent’s plans?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"interaction": 3
+			},
+			"left": "I prefer my own plan",
+			"right": "I love interfering"
+		},
+		{
+			"id": "C07",
+			"phase": "core",
+			"type": "single",
+			"question": "You have a limited amount of power to spend this turn. Which use appeals most?",
+			"answers": [
+				{
+					"text": "Use it all now for one impactful move.",
+					"scores": {
+						"aggro": 2,
+						"burst": 3
+					}
+				},
+				{
+					"text": "Spend it on several improvements that add up later.",
+					"scores": {
+						"midrange": 3,
+						"value_engine": 2
+					}
+				},
+				{
+					"text": "Keep some in reserve in case something goes wrong.",
+					"scores": {
+						"control": 2,
+						"consistency": 2
+					}
+				},
+				{
+					"text": "Invest in a specific payoff that could become amazing later.",
+					"scores": {
+						"setup": 3,
+						"combo": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "C08",
+			"phase": "core",
+			"type": "rank",
+			"question": "Rank these endings from most satisfying to least satisfying.",
+			"answers": [
+				{
+					"text": "An army overwhelms the battlefield.",
+					"scores": {
+						"tokens": 2,
+						"combat": 3
+					}
+				},
+				{
+					"text": "One legendary champion lands the final hit.",
+					"scores": {
+						"voltron": 2,
+						"commander_damage": 3
+					}
+				},
+				{
+					"text": "A clever combination wins suddenly.",
+					"scores": {
+						"combo_win": 3,
+						"combo": 2
+					}
+				},
+				{
+					"text": "I outlast everyone until they have no answers.",
+					"scores": {
+						"attrition": 3,
+						"control": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "C09",
+			"phase": "core",
+			"type": "single",
+			"question": "You can give your allies one unusual ability. Which do you choose?",
+			"answers": [
+				{
+					"text": "Keep gaining permanent strength.",
+					"scores": {
+						"counters": 3,
+						"stompy": 1
+					}
+				},
+				{
+					"text": "Disappear and return to reuse special abilities.",
+					"scores": {
+						"blink": 3,
+						"value_engine": 2
+					}
+				},
+				{
+					"text": "Create extra allies as you play.",
+					"scores": {
+						"tokens": 3,
+						"combat": 1
+					}
+				},
+				{
+					"text": "Reward me for casting spells in succession.",
+					"scores": {
+						"spellslinger": 3,
+						"combo": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "C10",
+			"phase": "core",
+			"type": "scale",
+			"question": "How much would you enjoy keeping track of several abilities that trigger and interact with one another?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"engine_complexity": 3
+			},
+			"left": "Not enjoyable",
+			"right": "Really enjoyable"
+		},
+		{
+			"id": "C11",
+			"phase": "core",
+			"type": "single",
+			"question": "Someone seems impossible to beat in a fair fight. What would you try?",
+			"answers": [
+				{
+					"text": "Use their best resource against them.",
+					"scores": {
+						"theft": 3,
+						"interaction": 1
+					}
+				},
+				{
+					"text": "Take apart the resources supporting their strategy.",
+					"scores": {
+						"disruption": 3,
+						"attrition": 1
+					}
+				},
+				{
+					"text": "Convince another player to help me.",
+					"scores": {
+						"politics": 3,
+						"social": 2
+					}
+				},
+				{
+					"text": "Pursue an unusual objective that bypasses combat.",
+					"scores": {
+						"alternate_win": 3,
+						"combo_win": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "C12",
+			"phase": "core",
+			"type": "single",
+			"question": "If you could win without attacking with creatures, how would you want to?",
+			"answers": [
+				{
+					"text": "Steal away their life while restoring mine.",
+					"scores": {
+						"life_drain": 3,
+						"lifegain": 2
+					}
+				},
+				{
+					"text": "Blast them with spells and direct damage.",
+					"scores": {
+						"burn": 3,
+						"spellslinger": 2
+					}
+				},
+				{
+					"text": "Empty their library so they cannot draw a card.",
+					"scores": {
+						"mill": 3,
+						"attrition": 1
+					}
+				},
+				{
+					"text": "Fulfill an unusual condition that says I win.",
+					"scores": {
+						"alternate_win": 3,
+						"combo_win": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "C13",
+			"phase": "core",
+			"type": "scale",
+			"question": "How willing would you be to risk your current progress for a chance at a much bigger payoff?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"high_risk": 3
+			},
+			"left": "Not willing",
+			"right": "Very willing"
+		},
+		{
+			"id": "C14",
+			"phase": "core",
+			"type": "select",
+			"question": "Pick up to two experiences you would love to have in a game.",
+			"answers": [
+				{
+					"text": "Feel powerful through creatures and combat.",
+					"scores": {
+						"stompy": 2,
+						"combat": 2
+					}
+				},
+				{
+					"text": "Build a system that generates benefits turn after turn.",
+					"scores": {
+						"value_engine": 3,
+						"midrange": 1
+					}
+				},
+				{
+					"text": "Predict and stop an opponent’s important move.",
+					"scores": {
+						"control": 2,
+						"interaction": 2
+					}
+				},
+				{
+					"text": "Pull off an unexpected combination.",
+					"scores": {
+						"combo": 2,
+						"synergy": 2
+					}
+				}
+			],
+			"maxSelections": 2
+		},
+		{
+			"id": "C15",
+			"phase": "core",
+			"type": "single",
+			"question": "You are losing, but you have enough resources for one meaningful move. What do you prioritize?",
+			"answers": [
+				{
+					"text": "Make the strongest move possible right now to turn things around.",
+					"scores": {
+						"burst": 3,
+						"aggro": 2
+					}
+				},
+				{
+					"text": "Recover what you lost and rebuild from there.",
+					"scores": {
+						"resilience": 3,
+						"graveyard": 1,
+						"midrange": 1
+					}
+				},
+				{
+					"text": "Keep your options open to stop the next dangerous move.",
+					"scores": {
+						"control": 3,
+						"interaction": 2
+					}
+				},
+				{
+					"text": "Attempt an unlikely plan with a chance to win outright.",
+					"scores": {
+						"high_risk": 2,
+						"combo_win": 2,
+						"combo": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "O01",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank the armies you would most like to lead.",
+			"answers": [
+				{
+					"text": "One unstoppable hero",
+					"scores": {
+						"voltron": 3,
+						"commander_damage": 2
+					}
+				},
+				{
+					"text": "Several enormous monsters",
+					"scores": {
+						"stompy": 3,
+						"combat": 1
+					}
+				},
+				{
+					"text": "Many small allies",
+					"scores": {
+						"tokens": 3,
+						"combat": 1
+					}
+				},
+				{
+					"text": "A team that upgrades together",
+					"scores": {
+						"counters": 3,
+						"typal": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O02",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is turning one creature into an almost unstoppable champion?",
+			"scores": {
+				"voltron": 3,
+				"commander_damage": 2
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O03",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is controlling a huge army of smaller creatures?",
+			"scores": {
+				"tokens": 3,
+				"combat": 1
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O04",
+			"phase": "optional",
+			"type": "single",
+			"question": "Your group has survived a difficult fight. Which upgrade feels most rewarding?",
+			"answers": [
+				{
+					"text": "Make each survivor individually stronger.",
+					"scores": {
+						"counters": 3
+					}
+				},
+				{
+					"text": "Create reinforcements to replace losses.",
+					"scores": {
+						"tokens": 3
+					}
+				},
+				{
+					"text": "Give everyone a bonus when teammates work together.",
+					"scores": {
+						"typal": 3,
+						"synergy": 1
+					}
+				},
+				{
+					"text": "Make it much harder for your favorite ally to be defeated.",
+					"scores": {
+						"voltron": 2,
+						"resilience": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "O05",
+			"phase": "optional",
+			"type": "select",
+			"question": "Which two themes would you actually want to see in your deck?",
+			"answers": [
+				{
+					"text": "Dragons and enormous beasts.",
+					"scores": {
+						"stompy": 3,
+						"typal": 1
+					}
+				},
+				{
+					"text": "Spirits, ghosts, and creatures returning from death.",
+					"scores": {
+						"graveyard": 3,
+						"typal": 1
+					}
+				},
+				{
+					"text": "Constructs, robots, and inventions.",
+					"scores": {
+						"artifacts": 3,
+						"typal": 1
+					}
+				},
+				{
+					"text": "Wizards with weird magical abilities.",
+					"scores": {
+						"spellslinger": 2,
+						"typal": 1,
+						"synergy": 1
+					}
+				}
+			],
+			"maxSelections": 2
+		},
+		{
+			"id": "O06",
+			"phase": "optional",
+			"type": "single",
+			"question": "You unexpectedly get enough resources for something expensive. What do you do?",
+			"answers": [
+				{
+					"text": "Summon something huge that can attack.",
+					"scores": {
+						"stompy": 3,
+						"combat": 1
+					}
+				},
+				{
+					"text": "Add several more creatures to the battlefield.",
+					"scores": {
+						"tokens": 3
+					}
+				},
+				{
+					"text": "Give your main fighter a permanent upgrade.",
+					"scores": {
+						"voltron": 3
+					}
+				},
+				{
+					"text": "Build an engine that keeps paying you back.",
+					"scores": {
+						"value_engine": 3,
+						"midrange": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O07",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How satisfying would it be if every new member of your team strengthened the others?",
+			"scores": {
+				"typal": 3,
+				"synergy": 2
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O08",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How enjoyable would managing a crowded battlefield with many creatures and abilities be?",
+			"scores": {
+				"board_complexity": 3
+			},
+			"left": "More annoying than fun",
+			"right": "Really fun"
+		},
+		{
+			"id": "O09",
+			"phase": "optional",
+			"type": "single",
+			"question": "One of your actions can trigger a reward every turn. What reward do you want?",
+			"answers": [
+				{
+					"text": "Permanently strengthen a creature.",
+					"scores": {
+						"counters": 3
+					}
+				},
+				{
+					"text": "Create a fresh ally.",
+					"scores": {
+						"tokens": 3
+					}
+				},
+				{
+					"text": "Draw more options to choose from.",
+					"scores": {
+						"value_engine": 3,
+						"consistency": 1
+					}
+				},
+				{
+					"text": "Deal a little damage to each opponent.",
+					"scores": {
+						"life_drain": 2,
+						"burn": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O10",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is keeping track of +1/+1 counters and watching individual creatures develop?",
+			"scores": {
+				"counters": 3,
+				"complexity": 1
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O11",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank these ways of using creatures more than once.",
+			"answers": [
+				{
+					"text": "Bring them back after they die",
+					"scores": {
+						"graveyard": 3
+					}
+				},
+				{
+					"text": "Sacrifice them for rewards",
+					"scores": {
+						"sacrifice": 3
+					}
+				},
+				{
+					"text": "Exile and return them to reuse abilities",
+					"scores": {
+						"blink": 3
+					}
+				},
+				{
+					"text": "Make copies of them",
+					"scores": {
+						"tokens": 3
+					}
+				}
+			]
+		},
+		{
+			"id": "O12",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How satisfying is having your own creatures die because it helps your strategy?",
+			"scores": {
+				"sacrifice": 3,
+				"life_drain": 1
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O13",
+			"phase": "optional",
+			"type": "single",
+			"question": "You discover a workshop with four different crafts. What would you learn?",
+			"answers": [
+				{
+					"text": "Build objects whose abilities depend on other objects.",
+					"scores": {
+						"artifacts": 3,
+						"synergy": 1
+					}
+				},
+				{
+					"text": "Create magic that stays in place and changes the rules.",
+					"scores": {
+						"enchantments": 3
+					}
+				},
+				{
+					"text": "Chain spells together for growing effects.",
+					"scores": {
+						"spellslinger": 3
+					}
+				},
+				{
+					"text": "Make creatures that produce useful effects when they arrive.",
+					"scores": {
+						"blink": 2,
+						"value_engine": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O14",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How much would you enjoy several little effects triggering one after another?",
+			"scores": {
+				"value_engine": 3,
+				"synergy": 2
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O15",
+			"phase": "optional",
+			"type": "select",
+			"question": "Pick up to two resources you would be most excited to have in abundance.",
+			"answers": [
+				{
+					"text": "Extra life and recovery",
+					"scores": {
+						"lifegain": 3
+					}
+				},
+				{
+					"text": "More mana and lands",
+					"scores": {
+						"landfall": 3
+					}
+				},
+				{
+					"text": "More cards to choose from",
+					"scores": {
+						"value_engine": 3
+					}
+				},
+				{
+					"text": "More creatures",
+					"scores": {
+						"tokens": 3
+					}
+				}
+			],
+			"maxSelections": 2
+		},
+		{
+			"id": "O16",
+			"phase": "optional",
+			"type": "single",
+			"question": "Your carefully built strategy falls apart halfway through a game. What would you prefer?",
+			"answers": [
+				{
+					"text": "Get my key pieces back from the graveyard.",
+					"scores": {
+						"graveyard": 3,
+						"resilience": 1
+					}
+				},
+				{
+					"text": "Have plenty of backup cards available.",
+					"scores": {
+						"consistency": 3
+					}
+				},
+				{
+					"text": "Make opponents suffer for destroying my things.",
+					"scores": {
+						"sacrifice": 2,
+						"life_drain": 2
+					}
+				},
+				{
+					"text": "Switch to a different plan with the resources I have.",
+					"scores": {
+						"adaptability": 3,
+						"midrange": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O17",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is gaining life repeatedly while your other abilities do their jobs?",
+			"scores": {
+				"lifegain": 3
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O18",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank these setbacks from MOST frustrating to LEAST frustrating.",
+			"answers": [
+				{
+					"text": "Losing the creatures I spent turns developing.",
+					"scores": {
+						"loss_creatures": 3
+					}
+				},
+				{
+					"text": "Running out of cards and useful choices.",
+					"scores": {
+						"loss_options": 3
+					}
+				},
+				{
+					"text": "Falling far behind in the first few turns.",
+					"scores": {
+						"loss_early": 3
+					}
+				},
+				{
+					"text": "Never finding the pieces my strategy depends on.",
+					"scores": {
+						"loss_setup": 3
+					}
+				}
+			]
+		},
+		{
+			"id": "O19",
+			"phase": "optional",
+			"type": "single",
+			"question": "If you could reuse the same type of resource again and again, which would be most interesting?",
+			"answers": [
+				{
+					"text": "Spells I have already cast.",
+					"scores": {
+						"spellslinger": 3
+					}
+				},
+				{
+					"text": "Creatures that were defeated.",
+					"scores": {
+						"graveyard": 3
+					}
+				},
+				{
+					"text": "Abilities on objects and artifacts.",
+					"scores": {
+						"artifacts": 3
+					}
+				},
+				{
+					"text": "Abilities of creatures that temporarily leave and return.",
+					"scores": {
+						"blink": 3
+					}
+				}
+			]
+		},
+		{
+			"id": "O20",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is having a deck that behaves like a machine, with many interconnected pieces?",
+			"scores": {
+				"value_engine": 3,
+				"artifacts": 1,
+				"complexity": 1
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O21",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank these victories from most satisfying to least satisfying.",
+			"answers": [
+				{
+					"text": "Win through combat attacks.",
+					"scores": {
+						"combat": 3
+					}
+				},
+				{
+					"text": "Win by casting damaging magic directly.",
+					"scores": {
+						"burn": 3
+					}
+				},
+				{
+					"text": "Win by repeatedly draining life.",
+					"scores": {
+						"life_drain": 3
+					}
+				},
+				{
+					"text": "Win by emptying an opponent’s library.",
+					"scores": {
+						"mill": 3
+					}
+				}
+			]
+		},
+		{
+			"id": "O22",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How satisfying is slowly wearing opponents down instead of winning all at once?",
+			"scores": {
+				"attrition": 3,
+				"life_drain": 1
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O23",
+			"phase": "optional",
+			"type": "single",
+			"question": "An opponent has a valuable permanent. What would you rather do?",
+			"answers": [
+				{
+					"text": "Steal and use it",
+					"scores": {
+						"theft": 3
+					}
+				},
+				{
+					"text": "Destroy it",
+					"scores": {
+						"disruption": 3
+					}
+				},
+				{
+					"text": "Temporarily stop it from working",
+					"scores": {
+						"control": 3
+					}
+				},
+				{
+					"text": "Ignore it and improve my own board",
+					"scores": {
+						"midrange": 3
+					}
+				}
+			]
+		},
+		{
+			"id": "O24",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is making opponents discard cards or lose access to options?",
+			"scores": {
+				"disruption": 3,
+				"attrition": 1
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O25",
+			"phase": "optional",
+			"type": "select",
+			"question": "Which two surprising victory stories would you most want to experience?",
+			"answers": [
+				{
+					"text": "A series of effects combine into a winning loop.",
+					"scores": {
+						"combo_win": 3
+					}
+				},
+				{
+					"text": "I meet an unusual requirement that wins immediately.",
+					"scores": {
+						"alternate_win": 3
+					}
+				},
+				{
+					"text": "My commander becomes the biggest threat on the table.",
+					"scores": {
+						"commander_damage": 3
+					}
+				},
+				{
+					"text": "An enormous coordinated attack finishes everyone.",
+					"scores": {
+						"tokens": 2,
+						"combat": 2
+					}
+				}
+			],
+			"maxSelections": 2
+		},
+		{
+			"id": "O26",
+			"phase": "optional",
+			"type": "single",
+			"question": "Attacking directly is not working. What sounds like the best alternate plan?",
+			"answers": [
+				{
+					"text": "Keep gathering resources until my board is stronger.",
+					"scores": {
+						"midrange": 3
+					}
+				},
+				{
+					"text": "Make every action slowly drain the opponent’s life.",
+					"scores": {
+						"life_drain": 3
+					}
+				},
+				{
+					"text": "Chase a special win condition that ignores combat.",
+					"scores": {
+						"alternate_win": 3
+					}
+				},
+				{
+					"text": "Destroy their resources until defending is impossible.",
+					"scores": {
+						"attrition": 3,
+						"disruption": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O27",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is a card that lets you win by meeting a strange, specific condition?",
+			"scores": {
+				"alternate_win": 3
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O28",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank ways you would prefer to manage an opposing threat.",
+			"answers": [
+				{
+					"text": "Prevent it before it happens",
+					"scores": {
+						"control": 3
+					}
+				},
+				{
+					"text": "Remove it after it appears",
+					"scores": {
+						"disruption": 3
+					}
+				},
+				{
+					"text": "Steal it",
+					"scores": {
+						"theft": 3
+					}
+				},
+				{
+					"text": "Persuade another player to handle it",
+					"scores": {
+						"politics": 3
+					}
+				}
+			]
+		},
+		{
+			"id": "O29",
+			"phase": "optional",
+			"type": "single",
+			"question": "What kind of action would you most enjoy punishing?",
+			"answers": [
+				{
+					"text": "An opponent attacking me.",
+					"scores": {
+						"control": 2,
+						"resilience": 1
+					}
+				},
+				{
+					"text": "An opponent casting too many spells.",
+					"scores": {
+						"control": 2,
+						"disruption": 1
+					}
+				},
+				{
+					"text": "An opponent drawing lots of cards.",
+					"scores": {
+						"disruption": 2,
+						"life_drain": 1
+					}
+				},
+				{
+					"text": "An opponent building a large army.",
+					"scores": {
+						"control": 2,
+						"burn": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O30",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How fun would it be to play cards borrowed or stolen from your opponents?",
+			"scores": {
+				"theft": 3
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O31",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank what you care about most in a win.",
+			"answers": [
+				{
+					"text": "Winning quickly",
+					"scores": {
+						"aggro": 3,
+						"fast_pace": 2
+					}
+				},
+				{
+					"text": "Winning reliably",
+					"scores": {
+						"consistency": 3,
+						"midrange": 1
+					}
+				},
+				{
+					"text": "Winning through a clever sequence",
+					"scores": {
+						"combo_win": 3,
+						"combo": 2
+					}
+				},
+				{
+					"text": "Winning after surviving a long struggle",
+					"scores": {
+						"attrition": 3,
+						"resilience": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O32",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How comfortable are you taking turns with many separate decisions and triggered abilities?",
+			"scores": {
+				"complexity": 3
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O33",
+			"phase": "optional",
+			"type": "single",
+			"question": "You can choose one reward for completing a difficult task. Which would you take?",
+			"answers": [
+				{
+					"text": "A modest reward I know I will receive.",
+					"scores": {
+						"consistency": 3,
+						"low_risk": 3
+					}
+				},
+				{
+					"text": "A much larger reward that only works if my plan succeeds.",
+					"scores": {
+						"high_risk": 3,
+						"combo": 1
+					}
+				},
+				{
+					"text": "A flexible reward I can choose later once I know more.",
+					"scores": {
+						"adaptability": 3
+					}
+				},
+				{
+					"text": "An immediate reward that lets me take action again.",
+					"scores": {
+						"aggro": 2,
+						"fast_pace": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "O34",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How frustrating would it be if your deck took several turns to get started?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"startup_frustration": 3
+			},
+			"left": "Not frustrating",
+			"right": "Very frustrating"
+		},
+		{
+			"id": "O35",
+			"phase": "optional",
+			"type": "select",
+			"question": "Pick the two moments you would most look forward to.",
+			"answers": [
+				{
+					"text": "Landing a decisive attack.",
+					"scores": {
+						"combat": 3
+					}
+				},
+				{
+					"text": "Getting a complicated system to work.",
+					"scores": {
+						"value_engine": 2,
+						"synergy": 2
+					}
+				},
+				{
+					"text": "Responding perfectly to an opponent’s move.",
+					"scores": {
+						"interaction": 3,
+						"control": 1
+					}
+				},
+				{
+					"text": "Discovering a strange combination.",
+					"scores": {
+						"combo": 2,
+						"synergy": 2
+					}
+				}
+			],
+			"maxSelections": 2
+		},
+		{
+			"id": "O36",
+			"phase": "optional",
+			"type": "single",
+			"question": "A player offers a temporary alliance. What would you do?",
+			"answers": [
+				{
+					"text": "Accept if we share an immediate goal.",
+					"scores": {
+						"politics": 2,
+						"social": 2
+					}
+				},
+				{
+					"text": "Negotiate exactly what each of us gets.",
+					"scores": {
+						"politics": 3,
+						"negotiation": 2
+					}
+				},
+				{
+					"text": "Decline; I want to focus on my own plan.",
+					"scores": {
+						"low_interaction": 3
+					}
+				},
+				{
+					"text": "Agree only if it stops the strongest player.",
+					"scores": {
+						"control": 1,
+						"adaptability": 2
+					}
+				}
+			]
+		},
+		{
+			"id": "O37",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How important is it to recover quickly after losing your main strategy?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"resilience": 3
+			},
+			"left": "Not important",
+			"right": "Essential"
+		},
+		{
+			"id": "O38",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank the qualities that make a deck appealing to you.",
+			"answers": [
+				{
+					"text": "A straightforward strategy that is easy to operate.",
+					"scores": {
+						"low_complexity": 3
+					}
+				},
+				{
+					"text": "Lots of technical choices and intricate decisions.",
+					"scores": {
+						"complexity": 3
+					}
+				},
+				{
+					"text": "Wild swings and unpredictable outcomes.",
+					"scores": {
+						"high_risk": 3,
+						"burst": 1
+					}
+				},
+				{
+					"text": "Reliable plans with opportunities to adapt.",
+					"scores": {
+						"consistency": 3,
+						"adaptability": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O39",
+			"phase": "optional",
+			"type": "single",
+			"question": "What kind of deck would be most satisfying to improve at over time?",
+			"answers": [
+				{
+					"text": "One that does the same job reliably, and I learn to execute it well.",
+					"scores": {
+						"consistency": 3
+					}
+				},
+				{
+					"text": "One that can switch between several plans.",
+					"scores": {
+						"adaptability": 3
+					}
+				},
+				{
+					"text": "One with surprising and unpredictable outcomes.",
+					"scores": {
+						"high_risk": 2,
+						"combo": 1
+					}
+				},
+				{
+					"text": "One where precise timing changes everything.",
+					"scores": {
+						"interaction": 2,
+						"control": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O40",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is carefully timing plays around what your opponents are doing?",
+			"scores": {
+				"interaction": 3,
+				"control": 1
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O41",
+			"phase": "optional",
+			"type": "single",
+			"question": "At a multiplayer table, what role sounds most fun?",
+			"answers": [
+				{
+					"text": "Being the obvious threat everyone must answer.",
+					"scores": {
+						"stompy": 2,
+						"aggro": 1
+					}
+				},
+				{
+					"text": "Staying unnoticed until my plan comes together.",
+					"scores": {
+						"setup": 3,
+						"combo": 1
+					}
+				},
+				{
+					"text": "Negotiating and making temporary allies.",
+					"scores": {
+						"politics": 3,
+						"social": 2
+					}
+				},
+				{
+					"text": "Keeping dangerous opponents in check.",
+					"scores": {
+						"control": 3,
+						"interaction": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O42",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is a strategy that sometimes does very little before one huge payoff?",
+			"scores": {
+				"combo": 2,
+				"setup": 3,
+				"high_risk": 1
+			},
+			"min": 1,
+			"max": 10,
+			"left": "Not appealing",
+			"right": "Very appealing"
+		},
+		{
+			"id": "O43",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How appealing is a deck whose best plays depend on what your opponents have?",
+			"scores": {
+				"reactive_dependency": 3
+			},
+			"left": "I want my own game plan",
+			"right": "I like adapting to them"
+		},
+		{
+			"id": "O44",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How much would you enjoy making many small decisions each turn rather than one or two big decisions?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"decision_density": 3
+			},
+			"left": "Prefer a few big choices",
+			"right": "Prefer many small choices"
+		},
+		{
+			"id": "O45",
+			"phase": "optional",
+			"type": "single",
+			"question": "Which part of a difficult game would frustrate you most?",
+			"answers": [
+				{
+					"text": "My creatures feel too weak to matter",
+					"scores": {
+						"stompy": 2,
+						"combat": 1
+					}
+				},
+				{
+					"text": "I keep losing everything I build",
+					"scores": {
+						"resilience": 3
+					}
+				},
+				{
+					"text": "I have too many interactions to remember",
+					"scores": {
+						"low_complexity": 3
+					}
+				},
+				{
+					"text": "I spend too long waiting to do anything",
+					"scores": {
+						"fast_pace": 3
+					}
+				}
+			]
+		}
+	]
+}

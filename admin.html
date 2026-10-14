@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<title>Magic Playstyle - Admin</title>
+
+	<link rel="stylesheet" href="main.css">
+
+	<style>
+		.admin-input {
+			display: block;
+			width: 100%;
+			min-height: 44px;
+			padding: 12px;
+			margin: 8px 0 16px;
+			border: 1px solid #dc94b6;
+			border-radius: 3px;
+			background: #fffafc;
+			font: inherit;
+		}
+
+		.admin-label {
+			display: block;
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		.admin-list {
+			display: grid;
+			gap: 10px;
+			margin: 20px 0;
+		}
+
+		.session-button {
+			width: 100%;
+			padding: 14px;
+			background: #fffafc;
+			border: 1px solid #dc94b6;
+			border-radius: 3px;
+			text-align: left;
+			color: #442b3a;
+			font: inherit;
+			cursor: pointer;
+		}
+
+		.session-button.selected {
+			border: 2px solid #ad5d89;
+			background: #f7d9e8;
+		}
+
+		.admin-section {
+			margin-top: 28px;
+		}
+
+		.admin-section h3 {
+			font-size: 17px;
+			margin-bottom: 12px;
+		}
+
+		.admin-row {
+			padding: 13px 0;
+			border-bottom: 1px solid #dc94b6;
+			overflow-wrap: anywhere;
+		}
+
+		.admin-row p {
+			margin: 6px 0;
+		}
+
+		.admin-muted {
+			font-size: 13px;
+			color: #80566b;
+		}
+
+		.admin-error {
+			color: #8e204a;
+			overflow-wrap: anywhere;
+		}
+
+		.admin-toolbar {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+			margin-top: 20px;
+		}
+
+		.admin-toolbar button {
+			flex: 1;
+		}
+
+		@media (max-width: 600px) {
+			.admin-toolbar button {
+				flex: 1 1 100%;
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<main>
+		<header class="page-header">
+			<h1>MAGIC PLAYSTYLE TEST</h1>
+			<p>admin dashboard</p>
+		</header>
+
+		<section id="loginPanel" class="form-box">
+			<h2>Admin Login</h2>
+			<p>Sign in to view saved quiz responses.</p>
+
+			<form id="loginForm">
+				<label class="admin-label" for="email">
+					Email
+				</label>
+				<input
+					id="email"
+					class="admin-input"
+					type="email"
+					autocomplete="username"
+					required
+				>
+
+				<label class="admin-label" for="password">
+					Password
+				</label>
+				<input
+					id="password"
+					class="admin-input"
+					type="password"
+					autocomplete="current-password"
+					required
+				>
+
+				<button class="primary" type="submit">
+					Sign In
+				</button>
+			</form>
+
+			<p id="loginError" class="admin-error" role="alert"></p>
+		</section>
+
+		<section id="dashboard" class="form-box hidden">
+			<h2>Saved Responses</h2>
+
+			<p id="dashboardStatus" aria-live="polite"></p>
+
+			<div class="admin-toolbar">
+				<button id="refreshBtn" class="secondary">
+					Refresh
+				</button>
+
+				<button id="logoutBtn" class="secondary">
+					Log Out
+				</button>
+			</div>
+
+			<div id="sessionList" class="admin-list"></div>
+
+			<div id="sessionDetails" class="hidden">
+				<hr>
+
+				<h2 id="sessionTitle"></h2>
+				<p id="sessionInfo"></p>
+
+				<div class="admin-toolbar">
+					<button id="copySessionBtn" class="secondary">
+						Copy Session Data
+					</button>
+				</div>
+
+				<div class="admin-section">
+					<h3>Playstyle Scores</h3>
+					<div id="adminScores"></div>
+				</div>
+
+				<div class="admin-section">
+					<h3>Individual Answers</h3>
+					<div id="adminAnswers"></div>
+				</div>
+			</div>
+		</section>
+	</main>
+
+	<script type="module" src="admin.js"></script>
+</body>
+</html>

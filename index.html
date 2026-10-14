@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Magic Playstyle Test</title>
+	<link rel="stylesheet" href="main.css">
+</head>
+<body>
+	<main>
+		<header class="page-header">
+			<h1>MAGIC PLAYSTYLE TEST</h1>
+			<p>for my amazing awesome gf so i can buy her a deck</p>
+		</header>
+
+		<section id="quiz" class="form-box">
+			<div class="quiz-info">
+				<span id="phaseLabel"></span>
+				<span id="questionNumber"></span>
+			</div>
+
+			<div class="progress">
+				<div id="progressBar"></div>
+			</div>
+
+			<h2 id="questionText"></h2>
+
+			<div id="answers" class="answers"></div>
+
+			<div class="actions">
+				<button id="backBtn" class="secondary" type="button">Back</button>
+				<button id="nextBtn" class="primary" type="button">Continue</button>
+				<button id="resultsBtn" class="secondary hidden" type="button">View Results</button>
+			</div>
+		</section>
+
+		<section id="results" class="form-box hidden">
+			<h2>Your Results</h2>
+			<p id="resultsDescription"></p>
+
+			<div id="scoreGroups"></div>
+
+			<div class="actions result-actions">
+				<button id="continueBtn" class="primary" type="button">Answer More Questions</button>
+				<button id="reviewBtn" class="secondary" type="button">Review Answers</button>
+				<button id="copyBtn" class="secondary" type="button">Copy Results</button>
+				<button id="resetBtn" class="secondary" type="button">Start Over</button>
+			</div>
+
+			<details class="debug">
+				<summary>Scoring Details</summary>
+				<pre id="debugOutput"></pre>
+			</details>
+		</section>
+
+		<section id="errorPanel" class="form-box hidden">
+			<h2>Something went wrong</h2>
+			<p id="errorText"></p>
+		</section>
+	</main>
+
+	<script type="module" src="app.js"></script>
+</body>
+</html>

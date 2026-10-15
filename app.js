@@ -1,4 +1,3 @@
-
 import {
 	initializeCloud,
 	saveCloud
@@ -216,113 +215,79 @@ function contribution(question, response) {
 
 function scoreProfile() {
 	const output = {};
-
 	for (const cat of Object.values(bank.categories).flat()) {
-		output[cat] = {
-			points: 0,
-			exposure: 0,
-			hits: 0,
-			opportunities: 0
-		};
+		output[cat] = {points: 0, exposure: 0, hits: 0, opportunities: 0};
 	}
-
 	for (const [id, response] of Object.entries(responses)) {
 		const q = questionById(id);
-
 		if (!q || !isAnswered(q)) continue;
-
 		const earned = contribution(q, response);
-
-		const options = q.type === 'scale'
-			? [q.scores]
-			: q.answers.map(a => a.scores);
-
+		const options = q.type === 'scale' ? [q.scores] : q.answers.map(a => a.scores);
 		for (const cat of Object.keys(output)) {
-			const max = Math.max(
-				0,
-				...options.map(o => Math.abs(o[cat] || 0))
-			);
-
+			const max = Math.max(0, ...options.map(o => Math.abs(o?.[cat] || 0)));
 			if (!max) continue;
-
 			output[cat].exposure += max;
 			output[cat].opportunities++;
 			output[cat].points += earned[cat] || 0;
-
-			if ((earned[cat] || 0) > 0) {
-				output[cat].hits++;
-			}
+			if ((earned[cat] || 0) > 0) output[cat].hits++;
 		}
 	}
-
-	for (const val of Object.values(output)) {
-		// Neutral prior prevents one rare category
-		// from immediately reaching 100%.
-
-		val.percent = Math.round(
-			50 + 50 * val.points / (val.exposure + 5)
-		);
-
-		val.percent = Math.max(
-			0,
-			Math.min(100, val.percent)
-		);
-
-		val.confidence =
-			val.opportunities >= 5 ? 'More evidence' :
-			val.opportunities >= 3 ? 'Some evidence' :
-			val.opportunities > 0 ? 'Limited evidence' :
-			'Unexplored';
+	for (const stat of Object.values(output)) {
+		// Strength is independent of the number of questions answered.
+		// Evidence indicates how much support is behind that strength.
+		stat.percent = stat.opportunities
+			? Math.max(0, Math.min(100,
+				Math.round(50 + 50 * stat.points / stat.exposure)))
+			: 50;
+		stat.strength = stat.percent;
+		stat.evidence = Math.min(1, stat.opportunities / 4);
+		stat.rankScore = Math.round(50 + (stat.percent - 50) * (0.65 + 0.35 * stat.evidence));
+		stat.confidence =
+			stat.opportunities >= 5 ? "More evidence" :
+			stat.opportunities >= 3 ? "Some evidence" :
+			stat.opportunities >= 1 ? "Limited evidence" :
+			"Unexplored";
 	}
-
 	return output;
 }
 
-function nextOptionalId() {
-	const used = new Set(history);
-	const stats = scoreProfile();
-
-	const candidates = bank.questions.filter(
-		q => q.phase === 'optional' && !used.has(q.id)
-	);
-
-	if (!candidates.length) return null;
-
-	// Prioritize promising categories that have
-	// received relatively little testing.
-
-	let best = candidates[0];
+function chooseOptionalQuestion(candidates, stats, bank) {
+	const groupFor = {};
+	for (const [group, keys] of Object.entries(bank.categories)) {
+		for (const key of keys) groupFor[key] = group;
+	}
+	const target = {Strategy: 3, Mechanics: 3, "Win Conditions": 3, Preferences: 2};
+	let best = null;
 	let bestScore = -Infinity;
 
 	for (const q of candidates) {
 		const sources = q.type === 'scale'
-			? [q.scores]
-			: q.answers.map(a => a.scores);
-
-		const tags = [
-			...new Set(
-				sources.flatMap(s => Object.keys(s))
-			)
-		];
-
-		const utility = tags.reduce((sum, tag) => {
-			const st = stats[tag];
-
-			return sum + (
-				st
-					? (0.8 + st.percent / 100) /
-						(1 + st.opportunities / 2)
-					: 0
-			);
-		}, 0) / Math.max(1, tags.length);
-
+			? [q.scores] : q.answers.map(a => a.scores);
+		const tags = [...new Set(sources.flatMap(s => Object.keys(s || {})))];
+		let utility = 0;
+		for (const tag of tags) {
+			const stat = stats[tag];
+			if (!stat) continue;
+			const desired = target[groupFor[tag]] || 2;
+			const gap = Math.max(0, desired - stat.opportunities) / desired;
+			const uncertainty = 1 - (stat.evidence || 0);
+			const interest = Math.max(0, (stat.rankScore - 50) / 50);
+			utility += 1.5 * gap + 0.5 * uncertainty + 0.35 * interest;
+		}
+		// Reward useful breadth; avoid questions with many unrelated labels winning automatically.
+		utility /= Math.sqrt(Math.max(1, tags.length));
 		if (utility > bestScore) {
 			best = q;
 			bestScore = utility;
 		}
 	}
+	return best;
+}
 
-	return best.id;
+function nextOptionalId() {
+	const used = new Set(history);
+	const candidates = bank.questions.filter(q => q.phase === 'optional' && !used.has(q.id));
+	return chooseOptionalQuestion(candidates, scoreProfile(), bank)?.id || null;
 }
 
 function el(tag, cls, text) {
@@ -606,6 +571,96 @@ function next() {
 	render();
 }
 
+function buildResultSummary(stats, make) {
+	const root = make('div', 'playstyle-summary');
+	const sorted = (keys) => keys
+		.filter(key => stats[key]?.opportunities > 0)
+		.sort((a, b) => stats[b].rankScore - stats[a].rankScore || stats[b].percent - stats[a].percent);
+	const available = keys => sorted(keys)[0] || null;
+	const note = (heading, label, description) => {
+		const section = make('section', 'group');
+		section.append(
+			make('h3', '', heading),
+			make('strong', '', label),
+			make('p', 'hint', description)
+		);
+		root.append(section);
+	};
+	const strategy = {
+		aggro: ['The Go-Getter', 'You like getting started and making things happen.'],
+		midrange: ['The Builder', 'You like making steady progress and getting stronger as you go.'],
+		control: ['The Planner', 'You like thinking ahead and having an answer when things change.'],
+		combo: ['The Puzzle Solver', 'You like putting pieces together and seeing a plan work out.']
+	};
+	const win = {
+		combat: ['Winning Together', 'You like building up a group and seeing it succeed.'],
+		commander_damage: ['One Big Star', 'You like putting your effort into one standout character.'],
+		life_drain: ['Little by Little', 'You like small advantages that really add up.'],
+		burn: ['A Big Finish', 'You like a direct, exciting finish.'],
+		combo_win: ['The Perfect Combination', 'You like making several things work together at just the right moment.'],
+		attrition: ['Outlasting Everyone', 'You like sticking around and making steady progress.'],
+		mill: ['An Unexpected Route', 'You like finding a different way to get to the finish line.'],
+		alternate_win: ['A Secret Plan', 'You like winning by doing something unusual.']
+	};
+	const names = {
+		stompy:'Big creatures', tokens:'Making a big team', counters:'Growing things',
+		voltron:'One main character', graveyard:'Second chances', sacrifice:'Trading things for rewards',
+		spellslinger:'Casting lots of spells', artifacts:'Clever gadgets', enchantments:'Lasting effects',
+		politics:'Making deals', disruption:'Changing plans', theft:'Borrowing tricks',
+		typal:'A matching team', lifegain:'Staying healthy', landfall:'Building resources',
+		blink:'Reusing abilities', value_engine:'Getting extra value', synergy:'Connecting the pieces'
+	};
+	const topStrategy = available(Object.keys(strategy));
+	if (topStrategy) note('YOUR MAIN PLAYSTYLE', ...strategy[topStrategy]);
+	else note('YOUR MAIN PLAYSTYLE', 'Still figuring it out', 'Answer a few more questions to see your style.');
+
+	const mechanics = sorted(Object.keys(names));
+	const supported = mechanics.filter(key => stats[key].opportunities >= 2 && stats[key].rankScore >= 55);
+	const favorites = (supported.length ? supported : mechanics).slice(0, 3).map(key => names[key]);
+	note('WHAT YOU ENJOY', favorites.join(' · ') || 'A little of everything',
+		'These are some of the things your answers leaned toward.');
+
+	const topWin = available(Object.keys(win));
+	if (topWin) note('YOUR FAVORITE WAY TO WIN', ...win[topWin]);
+
+	// Each category contributes only if it has actually been measured.
+	// Reverse-scored categories use (100 - score) to represent the opposite direction.
+	function combined(positive, negative) {
+		let sum = 0;
+		let weight = 0;
+		for (const key of positive) {
+			const s = stats[key];
+			if (!s || !s.opportunities) continue;
+			const w = Math.min(1, s.opportunities / 3);
+			sum += s.percent * w;
+			weight += w;
+		}
+		for (const key of negative) {
+			const s = stats[key];
+			if (!s || !s.opportunities) continue;
+			const w = Math.min(1, s.opportunities / 3);
+			sum += (100 - s.percent) * w;
+			weight += w;
+		}
+		return weight ? sum / weight : null;
+	}
+	const pacing = combined(['fast_pace', 'burst'], ['slow_pace', 'setup', 'consistency']);
+	if (pacing === null) note('YOUR PLAYING SPEED', 'A Little of Both', 'There is not enough information to pick a speed yet.');
+	else if (pacing < 40) note('YOUR PLAYING SPEED', 'Slow and Steady', 'You like taking your time and getting ready first.');
+	else if (pacing < 65) note('YOUR PLAYING SPEED', 'A Little of Both', 'You like a mix of planning and jumping right in.');
+	else note('YOUR PLAYING SPEED', 'Full Speed Ahead', 'You like getting started and keeping things moving.');
+
+	const complexity = combined(
+		['complexity', 'decision_density', 'board_complexity', 'engine_complexity'],
+		['low_complexity']
+	);
+	if (complexity === null) note('HOW YOU LIKE YOUR GAMES', 'Still Figuring It Out', 'A few more answers could help here.');
+	else if (complexity < 40) note('HOW YOU LIKE YOUR GAMES', 'Keep It Simple', 'You would rather have fun without too many things to track.');
+	else if (complexity < 65) note('HOW YOU LIKE YOUR GAMES', 'A Little Challenge', 'You like interesting choices without too much homework.');
+	else note('HOW YOU LIKE YOUR GAMES', 'Lots to Figure Out', 'You enjoy having plenty of little decisions and things to keep track of.');
+	return root;
+}
+
 function showResults() {
 	if (
 		!bank.questions
@@ -625,65 +680,15 @@ function showResults() {
 		.length;
 
 	$('resultsDescription').textContent =
-		`${total} questions answered. Scores show relative ` +
-		`evidence, not certainty or a probability of liking a deck.`;
+		`${total} questions answered. Here's what your answers say about you!`;
 
 	const target = $('scoreGroups');
 	target.replaceChildren();
+	target.append(buildResultSummary(stats, el));
 
-	for (const [group, keys] of Object.entries(bank.categories)) {
-		const section = el('section', 'group');
-
-		section.append(el('h2', '', group));
-
-		keys
-			.filter(key => stats[key].exposure > 0)
-			.sort(
-				(a, b) =>
-					stats[b].percent - stats[a].percent
-			)
-			.forEach(key => {
-				const val = stats[key];
-
-				const row = el('div', 'score-row');
-				const head = el('div', 'score-header');
-
-				head.append(
-					el(
-						'span',
-						'',
-						key.replaceAll('_', ' ')
-					),
-					el(
-						'strong',
-						'',
-						`${val.percent}%`
-					)
-				);
-
-				const track = el('div', 'track');
-				const fill = el('div', 'fill');
-
-				fill.style.width = `${val.percent}%`;
-				track.append(fill);
-
-				row.append(
-					head,
-					track,
-					el(
-						'div',
-						'details',
-						`${val.hits} positive signals · ` +
-						`${val.opportunities} questions · ` +
-						val.confidence
-					)
-				);
-
-				section.append(row);
-			});
-
-		target.append(section);
-	}
+	// The detailed 55-category breakdown remains available in admin.
+	const debugPanel = $('debugOutput')?.closest('details');
+	if (debugPanel) debugPanel.classList.add('hidden');
 
 	$('debugOutput').textContent = JSON.stringify(
 		{

@@ -1,4 +1,3 @@
-
 import {
 	initializeApp
 } from "https://www.gstatic.com/firebasejs/13.0.0/firebase-app.js";
@@ -170,16 +169,15 @@ function calculateScores(responses) {
 	}
 
 	for (const stat of Object.values(stats)) {
-		stat.percent = Math.max(
-			0,
-			Math.min(
-				100,
-				Math.round(
-					50 + 50 * stat.points / (stat.exposure + 5)
-				)
-			)
-		);
-
+		// Strength is independent of the number of questions answered.
+		// Evidence indicates how much support is behind that strength.
+		stat.percent = stat.opportunities
+			? Math.max(0, Math.min(100,
+				Math.round(50 + 50 * stat.points / stat.exposure)))
+			: 50;
+		stat.strength = stat.percent;
+		stat.evidence = Math.min(1, stat.opportunities / 4);
+		stat.rankScore = Math.round(50 + (stat.percent - 50) * (0.65 + 0.35 * stat.evidence));
 		stat.confidence =
 			stat.opportunities >= 5 ? "More evidence" :
 			stat.opportunities >= 3 ? "Some evidence" :
@@ -329,20 +327,112 @@ function renderSessionList() {
 	});
 }
 
+function buildResultSummary(stats, make) {
+	const root = make('div', 'playstyle-summary');
+	const sorted = (keys) => keys
+		.filter(key => stats[key]?.opportunities > 0)
+		.sort((a, b) => stats[b].rankScore - stats[a].rankScore || stats[b].percent - stats[a].percent);
+	const available = keys => sorted(keys)[0] || null;
+	const note = (heading, label, description) => {
+		const section = make('section', 'group');
+		section.append(
+			make('h3', '', heading),
+			make('strong', '', label),
+			make('p', 'hint', description)
+		);
+		root.append(section);
+	};
+	const strategy = {
+		aggro: ['The Go-Getter', 'You like getting started and making things happen.'],
+		midrange: ['The Builder', 'You like making steady progress and getting stronger as you go.'],
+		control: ['The Planner', 'You like thinking ahead and having an answer when things change.'],
+		combo: ['The Puzzle Solver', 'You like putting pieces together and seeing a plan work out.']
+	};
+	const win = {
+		combat: ['Winning Together', 'You like building up a group and seeing it succeed.'],
+		commander_damage: ['One Big Star', 'You like putting your effort into one standout character.'],
+		life_drain: ['Little by Little', 'You like small advantages that really add up.'],
+		burn: ['A Big Finish', 'You like a direct, exciting finish.'],
+		combo_win: ['The Perfect Combination', 'You like making several things work together at just the right moment.'],
+		attrition: ['Outlasting Everyone', 'You like sticking around and making steady progress.'],
+		mill: ['An Unexpected Route', 'You like finding a different way to get to the finish line.'],
+		alternate_win: ['A Secret Plan', 'You like winning by doing something unusual.']
+	};
+	const names = {
+		stompy:'Big creatures', tokens:'Making a big team', counters:'Growing things',
+		voltron:'One main character', graveyard:'Second chances', sacrifice:'Trading things for rewards',
+		spellslinger:'Casting lots of spells', artifacts:'Clever gadgets', enchantments:'Lasting effects',
+		politics:'Making deals', disruption:'Changing plans', theft:'Borrowing tricks',
+		typal:'A matching team', lifegain:'Staying healthy', landfall:'Building resources',
+		blink:'Reusing abilities', value_engine:'Getting extra value', synergy:'Connecting the pieces'
+	};
+	const topStrategy = available(Object.keys(strategy));
+	if (topStrategy) note('YOUR MAIN PLAYSTYLE', ...strategy[topStrategy]);
+	else note('YOUR MAIN PLAYSTYLE', 'Still figuring it out', 'Answer a few more questions to see your style.');
+
+	const mechanics = sorted(Object.keys(names));
+	const supported = mechanics.filter(key => stats[key].opportunities >= 2 && stats[key].rankScore >= 55);
+	const favorites = (supported.length ? supported : mechanics).slice(0, 3).map(key => names[key]);
+	note('WHAT YOU ENJOY', favorites.join(' · ') || 'A little of everything',
+		'These are some of the things your answers leaned toward.');
+
+	const topWin = available(Object.keys(win));
+	if (topWin) note('YOUR FAVORITE WAY TO WIN', ...win[topWin]);
+
+	// Each category contributes only if it has actually been measured.
+	// Reverse-scored categories use (100 - score) to represent the opposite direction.
+	function combined(positive, negative) {
+		let sum = 0;
+		let weight = 0;
+		for (const key of positive) {
+			const s = stats[key];
+			if (!s || !s.opportunities) continue;
+			const w = Math.min(1, s.opportunities / 3);
+			sum += s.percent * w;
+			weight += w;
+		}
+		for (const key of negative) {
+			const s = stats[key];
+			if (!s || !s.opportunities) continue;
+			const w = Math.min(1, s.opportunities / 3);
+			sum += (100 - s.percent) * w;
+			weight += w;
+		}
+		return weight ? sum / weight : null;
+	}
+	const pacing = combined(['fast_pace', 'burst'], ['slow_pace', 'setup', 'consistency']);
+	if (pacing === null) note('YOUR PLAYING SPEED', 'A Little of Both', 'There is not enough information to pick a speed yet.');
+	else if (pacing < 40) note('YOUR PLAYING SPEED', 'Slow and Steady', 'You like taking your time and getting ready first.');
+	else if (pacing < 65) note('YOUR PLAYING SPEED', 'A Little of Both', 'You like a mix of planning and jumping right in.');
+	else note('YOUR PLAYING SPEED', 'Full Speed Ahead', 'You like getting started and keeping things moving.');
+
+	const complexity = combined(
+		['complexity', 'decision_density', 'board_complexity', 'engine_complexity'],
+		['low_complexity']
+	);
+	if (complexity === null) note('HOW YOU LIKE YOUR GAMES', 'Still Figuring It Out', 'A few more answers could help here.');
+	else if (complexity < 40) note('HOW YOU LIKE YOUR GAMES', 'Keep It Simple', 'You would rather have fun without too many things to track.');
+	else if (complexity < 65) note('HOW YOU LIKE YOUR GAMES', 'A Little Challenge', 'You like interesting choices without too much homework.');
+	else note('HOW YOU LIKE YOUR GAMES', 'Lots to Figure Out', 'You enjoy having plenty of little decisions and things to keep track of.');
+	return root;
+}
+
 function renderScores(session) {
 	const target = $("adminScores");
 	target.replaceChildren();
 
 	const stats = calculateScores(session.responses || {});
 
+	target.append(buildResultSummary(stats, element));
+	target.append(element("h3", "", "Full Category Breakdown"));
+
 	for (const [groupName, categories] of Object.entries(bank.categories)) {
 		const group = element("div", "group");
 		group.append(element("h3", "", groupName));
 
-		const ranked = categories
-			.filter(category => stats[category]?.opportunities > 0)
+		const ranked = [...categories]
 			.sort((a, b) =>
-				stats[b].percent - stats[a].percent
+				stats[b].rankScore - stats[a].rankScore || stats[b].percent - stats[a].percent
 			);
 
 		for (const category of ranked) {
@@ -368,7 +458,7 @@ function renderScores(session) {
 				element(
 					"div",
 					"details",
-					`${stat.opportunities} questions · ${stat.confidence}`
+					`Strength ${stat.percent}% · ${stat.opportunities} questions · ${stat.confidence}`
 				)
 			);
 

@@ -1,9 +1,8 @@
-
 (async () => {
 	"use strict";
 
 	const SETTINGS = {
-		runs: 20,
+		runs: 5,
 		optionalQuestions: 25,
 		seed: 12345,
 		recognitionThreshold: 10,
@@ -175,15 +174,20 @@
 		}
 
 		for (const stat of Object.values(output)) {
-			stat.percent = Math.max(
-				0,
-				Math.min(
-					100,
-					Math.round(
-						50 + 50 * stat.points / (stat.exposure + 5)
-					)
-				)
-			);
+				// Strength is independent of the number of questions answered.
+				// Evidence indicates how much support is behind that strength.
+				stat.percent = stat.opportunities
+						? Math.max(0, Math.min(100,
+								Math.round(50 + 50 * stat.points / stat.exposure)))
+						: 50;
+				stat.strength = stat.percent;
+				stat.evidence = Math.min(1, stat.opportunities / 4);
+				stat.rankScore = Math.round(50 + (stat.percent - 50) * (0.65 + 0.35 * stat.evidence));
+				stat.confidence =
+						stat.opportunities >= 5 ? "More evidence" :
+						stat.opportunities >= 3 ? "Some evidence" :
+						stat.opportunities >= 1 ? "Limited evidence" :
+						"Unexplored";
 		}
 
 		return output;
@@ -284,43 +288,44 @@
 	// Matches the current quiz logic
 	// ------------------------------
 
-	function nextOptional(used, answers) {
-		const stats = scoreProfile(answers);
-
+	function chooseOptionalQuestion(candidates, stats, bank) {
+		const groupFor = {};
+		for (const [group, keys] of Object.entries(bank.categories)) {
+			for (const key of keys) groupFor[key] = group;
+		}
+		const target = {Strategy: 3, Mechanics: 3, "Win Conditions": 3, Preferences: 2};
 		let best = null;
 		let bestScore = -Infinity;
 
-		for (const question of optional) {
-			if (used.has(question.id)) continue;
-
-			const sources = question.type === "scale"
-				? [question.scores]
-				: question.answers.map(answer => answer.scores);
-
-			const tags = [
-				...new Set(
-					sources.flatMap(scores => Object.keys(scores || {}))
-				)
-			];
-
-			const score = tags.reduce((sum, tag) => {
+		for (const q of candidates) {
+			const sources = q.type === 'scale'
+				? [q.scores] : q.answers.map(a => a.scores);
+			const tags = [...new Set(sources.flatMap(s => Object.keys(s || {})))];
+			let utility = 0;
+			for (const tag of tags) {
 				const stat = stats[tag];
-
-				return sum + (
-					stat
-						? (0.8 + stat.percent / 100) /
-							(1 + stat.opportunities / 2)
-						: 0
-				);
-			}, 0) / Math.max(1, tags.length);
-
-			if (score > bestScore) {
-				best = question;
-				bestScore = score;
+				if (!stat) continue;
+				const desired = target[groupFor[tag]] || 2;
+				const gap = Math.max(0, desired - stat.opportunities) / desired;
+				const uncertainty = 1 - (stat.evidence || 0);
+				const interest = Math.max(0, (stat.rankScore - 50) / 50);
+				utility += 1.5 * gap + 0.5 * uncertainty + 0.35 * interest;
+			}
+			// Reward useful breadth; avoid questions with many unrelated labels winning automatically.
+			utility /= Math.sqrt(Math.max(1, tags.length));
+			if (utility > bestScore) {
+				best = q;
+				bestScore = utility;
 			}
 		}
-
 		return best;
+	}
+	function nextOptional(used, answers) {
+		return chooseOptionalQuestion(
+			optional.filter(q => !used.has(q.id)),
+			scoreProfile(answers),
+			bank
+		);
 	}
 
 	function runPlayer(preferences = {}, optionalCount = 25, seed = 1) {
@@ -384,6 +389,7 @@
 		const ranked = groups[groupName]
 			.filter(key => stats[key].opportunities > 0)
 			.sort((a, b) =>
+				stats[b].rankScore - stats[a].rankScore ||
 				stats[b].percent - stats[a].percent ||
 				stats[b].hits - stats[a].hits
 			);
@@ -448,6 +454,7 @@
 	for (const category of categories) {
 		const neutralScores = [];
 		const preferredScores = [];
+		const preferredEvidence = [];
 		const neutralRanks = [];
 		const preferredRanks = [];
 		const corePreferredRanks = [];
@@ -480,6 +487,7 @@
 
 			neutralScores.push(neutralScore);
 			preferredScores.push(preferredScore);
+			preferredEvidence.push(preferred.stats[category].evidence);
 
 			neutralRanks.push(
 				categoryRank(neutral.stats, category) ?? 999
@@ -506,6 +514,7 @@
 			group: getGroup(category),
 			neutralAverage: Math.round(neutralAverage),
 			preferredAverage: Math.round(preferredAverage),
+			averageEvidence: Math.round(100 * average(preferredEvidence)),
 			improvement: Math.round(
 				preferredAverage - neutralAverage
 			),

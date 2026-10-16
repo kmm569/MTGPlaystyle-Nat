@@ -427,6 +427,7 @@ function render() {
 
 		ends.append(
 			el('span', '', q.left || 'Not appealing'),
+			el('span', 'scale-mid', q.mid || ''),
 			el('span', '', q.right || 'Very appealing')
 		);
 

@@ -1,5 +1,5 @@
 {
-	"version": "5.0",
+	"version": "5.1",
 	"coreCount": 15,
 	"optionalLimit": 25,
 	"categories": {
@@ -75,7 +75,7 @@
 			"question": "You could be known for one EPIC talent. What would you choose?",
 			"answers": [
 				{
-					"text": "Being crazy powerful at one thing.",
+					"text": "Being crazy powerful at one thing",
 					"scores": {
 						"voltron": 3,
 						"commander_damage": 2,
@@ -83,7 +83,7 @@
 					}
 				},
 				{
-					"text": "Leading a big group that gets better together.",
+					"text": "Leading a big group that gets better together",
 					"scores": {
 						"tokens": 3,
 						"typal": 2,
@@ -91,14 +91,14 @@
 					}
 				},
 				{
-					"text": "Combining unrelated skills into something useful.",
+					"text": "Combining unrelated skills into something useful",
 					"scores": {
 						"combo": 3,
 						"spellslinger": 2
 					}
 				},
 				{
-					"text": "Seeing problems coming and deciding how situations unfold.",
+					"text": "Seeing problems coming and deciding how situations unfold",
 					"scores": {
 						"control": 3,
 						"interaction": 2
@@ -110,31 +110,30 @@
 			"id": "C02",
 			"phase": "core",
 			"type": "rank",
-			"question": "You're planning a weekend with friends. Rank how you would handle it.",
+			"question": "You're planning a weekend with friends. Rank how you'd go about it.",
 			"answers": [
 				{
-					"text": "Start the hangout asap and figure things out as you go.",
+					"text": "Start the hangout asap and figure stuff out as you go",
 					"scores": {
 						"aggro": 3,
 						"fast_pace": 2
 					}
 				},
 				{
-					"text": "Stick to basic activities you know everyone will enjoy.",
+					"text": "Stick to the basics, stuff you know everyone will like",
 					"scores": {
 						"midrange": 3,
 						"consistency": 2
 					}
 				},
 				{
-					"text": "Plan ahead and make sure you're prepared if something goes wrong.",
+					"text": "Plan ahead so you're covered if something goes wrong",
 					"scores": {
-						"control": 3,
-						"interaction": 2
+						"control": 3
 					}
 				},
 				{
-					"text": "Spend extra time organizing one big activity instead of several smaller ones.",
+					"text": "Put all the effort into one big activity instead of a bunch of small ones",
 					"scores": {
 						"combo": 3,
 						"setup": 2
@@ -142,53 +141,48 @@
 				}
 			]
 		},
-		
-{
-	"id": "C03",
-	"phase": "core",
-	"type": "scale",
-	"question": "Do you prefer making steady progress over time or seeing immediate results?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"growth_preference": 3
-	},
-	"left": "Immediate results",
-	"right": "Steady progress over time"
-}
-,
+		{
+			"id": "C03",
+			"phase": "core",
+			"type": "scale",
+			"question": "Do you like seeing results right away, or building up slowly over time?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"growth_preference": 3
+			},
+			"left": "Right away",
+			"right": "Slow and steady",
+			"mid": "A mix of both"
+		},
 		{
 			"id": "C04",
 			"phase": "core",
-			"type": "single",
-			"question": "A project you cared about unexpectedly falls apart. What would you most likely do in response?",
+			"type": "rank",
+			"question": "Rank these deck styles from the one that sounds most like you to the least.",
 			"answers": [
 				{
-					"text": "Restore the parts that worked and try again.",
+					"text": "Hit them early and fast and try to win before they're ready",
 					"scores": {
-						"graveyard": 3,
-						"resilience": 2
+						"aggro": 3
 					}
 				},
 				{
-					"text": "Find a way for the setback itself to become useful.",
+					"text": "Solid creatures and a few tricks, nothing flashy, just good cards",
 					"scores": {
-						"sacrifice": 3,
-						"life_drain": 1
+						"midrange": 3
 					}
 				},
 				{
-					"text": "Secure what remains and adapt the plan.",
+					"text": "Answer everything they do and win later on",
 					"scores": {
-						"control": 1,
-						"resilience": 3
+						"control": 3
 					}
 				},
 				{
-					"text": "Come back with something bigger and more ambitious.",
+					"text": "Set up a combo that wins the game out of nowhere",
 					"scores": {
-						"aggro": 2,
-						"combat": 2
+						"combo": 3
 					}
 				}
 			]
@@ -197,86 +191,82 @@
 			"id": "C05",
 			"phase": "core",
 			"type": "rank",
-			"question": "Put these things in order from most interesting to least interesting.",
+			"question": "Rank these from most interesting to least interesting.",
 			"answers": [
 				{
-					"text": "Build a team of creatures that becomes powerful together.",
+					"text": "A team of creatures that gets stronger together",
 					"scores": {
-						"typal": 3,
-						"tokens": 1
+						"typal": 3
 					}
 				},
 				{
-					"text": "Create lasting magical effects that improve everything you do.",
+					"text": "Magic effects that stick around and make everything you do better",
 					"scores": {
 						"enchantments": 3,
 						"value_engine": 1
 					}
 				},
 				{
-					"text": "Connect inventions that give each other new abilities.",
+					"text": "Gadgets and inventions that give each other new abilities",
 					"scores": {
 						"artifacts": 3,
 						"value_engine": 1
 					}
 				},
 				{
-					"text": "Expand your territory to produce more resources over time.",
+					"text": "Get a little bonus every time you play a land",
 					"scores": {
-						"landfall": 3,
-						"midrange": 1
+						"landfall": 3
 					}
 				}
 			]
 		},
-		
-{
-	"id": "C06",
-	"phase": "core",
-	"type": "scale",
-	"question": "When working on something, do you prefer doing your own thing or being involved with what others are doing?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"interaction": 3,
-		"low_interaction": -3
-	},
-	"left": "Doing my own thing",
-	"right": "Being involved with others"
-}
-,
+		{
+			"id": "C06",
+			"phase": "core",
+			"type": "scale",
+			"question": "When you're working on something, do you like doing your own thing or being part of what everyone else is doing?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"social": 3,
+				"interaction": 1,
+				"low_interaction": -1
+			},
+			"left": "Doing my own thing",
+			"right": "Being part of it all",
+			"mid": "Depends on the day"
+		},
 		{
 			"id": "C07",
 			"phase": "core",
 			"type": "single",
-			"question": "You have one free afternoon and a limited budget. Which sounds most rewarding?",
+			"question": "You've got a free afternoon and not much money. What sounds best?",
 			"answers": [
 				{
-					"text": "Spend it on one amazing experience right now.",
+					"text": "Blow it all on one amazing thing right now",
 					"scores": {
-						"aggro": 2,
 						"burst": 3
 					}
 				},
 				{
-					"text": "Make a few smaller purchases or improvements that will last.",
+					"text": "Buy a few smaller things that'll last a while",
 					"scores": {
 						"midrange": 3,
 						"value_engine": 2
 					}
 				},
 				{
-					"text": "Keep some money aside in case plans change.",
+					"text": "Keep some back in case plans change",
 					"scores": {
-						"control": 2,
+						"control": 1,
 						"consistency": 2
 					}
 				},
 				{
-					"text": "Save it toward a very specific dream purchase.",
+					"text": "Save it all toward one specific dream thing",
 					"scores": {
-						"setup": 3,
-						"combo": 2
+						"setup": 3
 					}
 				}
 			]
@@ -285,31 +275,31 @@
 			"id": "C08",
 			"phase": "core",
 			"type": "rank",
-			"question": "Rank these endings from most satisfying to least satisfying.",
+			"question": "Rank these endings from most satisfying to least.",
 			"answers": [
 				{
-					"text": "An army overwhelms the battlefield.",
+					"text": "A huge army just overwhelms everything",
 					"scores": {
 						"tokens": 2,
 						"combat": 3
 					}
 				},
 				{
-					"text": "One legendary champion lands the final hit.",
+					"text": "One legendary champion lands the final hit",
 					"scores": {
 						"voltron": 2,
 						"commander_damage": 3
 					}
 				},
 				{
-					"text": "A clever combination wins suddenly.",
+					"text": "A clever combo comes together and wins out of nowhere",
 					"scores": {
 						"combo_win": 3,
 						"combo": 2
 					}
 				},
 				{
-					"text": "I outlast everyone until they have no answers.",
+					"text": "I outlast everybody until they've got nothing left",
 					"scores": {
 						"attrition": 3,
 						"control": 1
@@ -321,31 +311,30 @@
 			"id": "C09",
 			"phase": "core",
 			"type": "single",
-			"question": "You can gain one unusual ability. Which do you choose?",
+			"question": "You get to pick one weird superpower. Which one?",
 			"answers": [
 				{
-					"text": "Your creature(s) keep gaining permanent strength.",
+					"text": "Your creatures keep getting permanently stronger",
 					"scores": {
-						"counters": 3,
-						"stompy": 1
+						"counters": 3
 					}
 				},
 				{
-					"text": "Creature(s) can disappear and return to reuse special abilities.",
+					"text": "Your creatures can vanish and come back so you can use their abilities again",
 					"scores": {
 						"blink": 3,
 						"value_engine": 2
 					}
 				},
 				{
-					"text": "You can create extra allies as you play.",
+					"text": "You can make extra little allies as you play",
 					"scores": {
 						"tokens": 3,
 						"combat": 1
 					}
 				},
 				{
-					"text": "Be rewarded for casting spells in succession.",
+					"text": "You get rewarded for casting spells back to back",
 					"scores": {
 						"spellslinger": 3,
 						"combo": 1
@@ -357,7 +346,7 @@
 			"id": "C10",
 			"phase": "core",
 			"type": "scale",
-			"question": "How much would you enjoy managing lots of abilities that interact with each other?",
+			"question": "How much would you enjoy juggling a bunch of abilities that all interact with each other?",
 			"min": 1,
 			"max": 10,
 			"scores": {
@@ -365,74 +354,54 @@
 				"complexity": 2,
 				"low_complexity": -2
 			},
-			"left": "Prefer simple systems",
-			"right": "Love intricate systems"
+			"left": "Keep it simple",
+			"right": "Bring on the complicated stuff",
+			"mid": "Some is fine"
 		},
 		{
 			"id": "C11",
 			"phase": "core",
-			"type": "single",
-			"question": "Your group has a problem that nobody can solve by the obvious method. What would you do?",
-			"answers": [
-				{
-					"text": "Borrow an idea or tool from someone who is doing well.",
-					"scores": {
-						"theft": 3,
-						"interaction": 1
-					}
-				},
-				{
-					"text": "Figure out which parts of the problem can be removed.",
-					"scores": {
-						"disruption": 3,
-						"attrition": 1
-					}
-				},
-				{
-					"text": "Get other people on board to solve it together.",
-					"scores": {
-						"politics": 3,
-						"social": 2
-					}
-				},
-				{
-					"text": "Find a completely different goal that makes the problem irrelevant.",
-					"scores": {
-						"alternate_win": 3,
-						"combo_win": 1
-					}
-				}
-			]
+			"type": "scale",
+			"question": "Would you rather your deck mostly build its own plan, or mostly mess with what your opponents are doing?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"interaction": 3,
+				"low_interaction": -3
+			},
+			"left": "Build my own plan",
+			"right": "Mess with their plans",
+			"mid": "A bit of both"
 		},
 		{
 			"id": "C12",
 			"phase": "core",
 			"type": "single",
-			"question": "If you could win without attacking with creatures, how would you want to?",
+			"question": "If you could win without attacking with creatures, how would you want to do it?",
 			"answers": [
 				{
-					"text": "Steal away their life while restoring mine.",
+					"text": "Drain their life and gain it back for myself",
 					"scores": {
 						"life_drain": 3,
 						"lifegain": 2
 					}
 				},
 				{
-					"text": "Blast them with spells and direct damage.",
+					"text": "Blast them with spells and direct damage",
 					"scores": {
 						"burn": 3,
 						"spellslinger": 2
 					}
 				},
 				{
-					"text": "Empty their library so they cannot draw a card.",
+					"text": "Empty out their deck so they can't draw anymore",
 					"scores": {
 						"mill": 3,
 						"attrition": 1
 					}
 				},
 				{
-					"text": "Fulfill an unusual condition that says I win.",
+					"text": "Meet some weird condition on a card that just says I win",
 					"scores": {
 						"alternate_win": 3,
 						"combo_win": 1
@@ -444,45 +413,46 @@
 			"id": "C13",
 			"phase": "core",
 			"type": "scale",
-			"question": "How willing are you to risk progress you already made for the chance at a much bigger reward?",
+			"question": "Would you risk progress you've already made for a shot at something way bigger?",
 			"min": 1,
 			"max": 10,
 			"scores": {
 				"high_risk": 3,
 				"low_risk": -3
 			},
-			"left": "Prefer dependable progress",
-			"right": "Love big gambles"
+			"left": "Keep what I have",
+			"right": "Roll the dice",
+			"mid": "Depends on the stakes"
 		},
 		{
 			"id": "C14",
 			"phase": "core",
 			"type": "select",
-			"question": "Pick up to two experiences you would love to have in a game.",
+			"question": "Pick up to two things you'd love to get out of a game.",
 			"answers": [
 				{
-					"text": "Feel powerful through creatures and combat.",
+					"text": "Feel powerful with big creatures and combat",
 					"scores": {
 						"stompy": 2,
 						"combat": 2
 					}
 				},
 				{
-					"text": "Build a system that generates benefits turn after turn.",
+					"text": "Build something that keeps giving me stuff every turn",
 					"scores": {
 						"value_engine": 3,
 						"midrange": 1
 					}
 				},
 				{
-					"text": "Predict and stop an opponent’s important move.",
+					"text": "See an opponent's big move coming and shut it down",
 					"scores": {
 						"control": 2,
 						"interaction": 2
 					}
 				},
 				{
-					"text": "Pull off an unexpected combination.",
+					"text": "Pull off a combo nobody sees coming",
 					"scores": {
 						"combo": 2,
 						"synergy": 2
@@ -495,36 +465,31 @@
 			"id": "C15",
 			"phase": "core",
 			"type": "single",
-			"question": "Something you have been working on is going badly, and you can make one meaningful change. What do you prioritize?",
+			"question": "You're losing a game of commander and it's finally your turn. What sounds most like you?",
 			"answers": [
 				{
-					"text": "Make a change right away to get things moving again.",
+					"text": "Throw everything I have into one huge turn to catch back up",
 					"scores": {
-						"burst": 3,
-						"aggro": 2
+						"burst": 3
 					}
 				},
 				{
-					"text": "Recover the best parts and rebuild steadily.",
+					"text": "Protect what I have left and slowly rebuild",
 					"scores": {
-						"resilience": 3,
-						"graveyard": 1,
-						"midrange": 1
+						"resilience": 3
 					}
 				},
 				{
-					"text": "Stay flexible to respond to whatever goes wrong next.",
+					"text": "Change my plan to whatever the board needs right now",
 					"scores": {
-						"control": 3,
-						"interaction": 2
+						"adaptability": 3,
+						"control": 1
 					}
 				},
 				{
-					"text": "Try a long-shot idea that could go bad, or could solve everything at once.",
+					"text": "Go for a risky play that wins it if it works and loses it if it doesn't",
 					"scores": {
-						"high_risk": 2,
-						"combo_win": 2,
-						"combo": 2
+						"high_risk": 3
 					}
 				}
 			]
@@ -533,645 +498,625 @@
 			"id": "O01",
 			"phase": "optional",
 			"type": "rank",
-	"question": "Rank the type of army you would most like to lead.",
-	"answers": [
-		{
-			"text": "One unstoppable hero",
-			"scores": {
-				"voltron": 3,
-				"commander_damage": 2
-			}
-		},
-		{
-			"text": "A few enormous monsters",
-			"scores": {
-				"stompy": 3,
-				"combat": 1
-			}
-		},
-		{
-			"text": "Many small allies working together",
-			"scores": {
-				"tokens": 3,
-				"combat": 1
-			}
-		},
-		{
-			"text": "Ordinary fighters that grow stronger over time",
-			"scores": {
-				"counters": 3,
-				"typal": 1
-			}
-		}
-	]
-		},
-		
-
-{
-	"id": "O02",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather focus on making one character extremely powerful or building a team of moderately strong characters?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"voltron": 3,
-		"commander_damage": 2,
-		"tokens": -2
-	},
-	"left": "A team of strong characters",
-	"right": "One extremely powerful character"
-}
-
-,
-		
-{
-	"id": "O03",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather have a large group of weaker characters or a smaller group of stronger characters?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"tokens": 3,
-		"stompy": -2
-	},
-	"left": "Fewer, stronger characters",
-	"right": "More, weaker characters"
-}
-,
-		
-{
-	"id": "O04",
-	"phase": "optional",
-	"type": "single",
-	"question": "You're putting together a team of fantasy creatures. Which ability would you most want your team to have?",
-	"answers": [
-		{
-			"text": "They gradually grow stronger the longer they're around.",
-			"scores": {
-				"counters": 3
-			}
-		},
-		{
-			"text": "They can summon more creatures to join the team.",
-			"scores": {
-				"tokens": 3
-			}
-		},
-		{
-			"text": "They become stronger when surrounded by others of their kind.",
-			"scores": {
-				"typal": 3,
-				"synergy": 1
-			}
-		},
-		{
-			"text": "They can combine their strength to create one powerful champion.",
-			"scores": {
-				"voltron": 3
-			}
-		}
-	]
-}
-,
-		
-{
-	"id": "O05",
-	"phase": "optional",
-	"type": "select",
-	"question": "Which two abilities would you most want your deck to have?",
-	"maxSelections": 2,
-	"answers": [
-		{
-			"text": "Use huge creatures to deal massive amounts of damage.",
-			"scores": {
-				"stompy": 3,
-				"combat": 1
-			}
-		},
-		{
-			"text": "Bring creatures back from the dead to use them again.",
-			"scores": {
-				"graveyard": 3,
-				"resilience": 1
-			}
-		},
-		{
-			"text": "Build machines and inventions that work together to become more powerful.",
-			"scores": {
-				"artifacts": 3,
-				"synergy": 1
-			}
-		},
-		{
-			"text": "Cast lots of spells to create different effects and combinations.",
-			"scores": {
-				"spellslinger": 3,
-				"combo": 1
-			}
-		}
-	]
-}
-,
-		{
-			"id": "O06",
-			"phase": "optional",
-			"type": "single",
-			"question": "You unexpectedly receive a generous gift card. What sounds most fun?",
+			"question": "Rank the type of army you would most like to lead.",
 			"answers": [
 				{
-					"text": "Buy one big, impressive thing you have wanted.",
+					"text": "One unstoppable hero",
+					"scores": {
+						"voltron": 3,
+						"commander_damage": 2
+					}
+				},
+				{
+					"text": "A few enormous monsters",
 					"scores": {
 						"stompy": 3,
 						"combat": 1
 					}
 				},
 				{
-					"text": "Get lots of smaller things to enjoy together.",
+					"text": "Many small allies working together",
+					"scores": {
+						"tokens": 3,
+						"combat": 1
+					}
+				},
+				{
+					"text": "Ordinary fighters that grow stronger over time",
+					"scores": {
+						"counters": 3,
+						"typal": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O02",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you rather focus on making one character extremely powerful or building a team of moderately strong characters?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"voltron": 3,
+				"commander_damage": 2,
+				"tokens": -2
+			},
+			"left": "A team of strong characters",
+			"right": "One extremely powerful character",
+			"mid": "A bit of both"
+		},
+		{
+			"id": "O03",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you rather have a large group of weaker characters or a smaller group of stronger characters?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"tokens": 3,
+				"stompy": -2
+			},
+			"left": "Fewer, stronger characters",
+			"right": "More, weaker characters",
+			"mid": "A mix"
+		},
+		{
+			"id": "O04",
+			"phase": "optional",
+			"type": "single",
+			"question": "You're putting together a team of fantasy creatures. Which ability would you most want your team to have?",
+			"answers": [
+				{
+					"text": "They gradually grow stronger the longer they're around",
+					"scores": {
+						"counters": 3
+					}
+				},
+				{
+					"text": "They can summon more creatures to join the team",
 					"scores": {
 						"tokens": 3
 					}
 				},
 				{
-					"text": "Upgrade something you already love.",
+					"text": "They become stronger when surrounded by others of their kind",
 					"scores": {
-						"voltron": 3
+						"typal": 3,
+						"synergy": 1
 					}
 				},
 				{
-					"text": "Buy tools or supplies that make future projects easier.",
+					"text": "They can combine their strength to create one powerful champion",
 					"scores": {
-						"value_engine": 3,
-						"midrange": 1
+						"voltron": 3
 					}
 				}
 			]
 		},
-		
-{
-	"id": "O07",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather have creatures that are powerful on their own or creatures that become stronger by working together?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"typal": 3,
-		"synergy": 2,
-		"stompy": -2
-	},
-	"left": "Powerful on their own",
-	"right": "Stronger together"
-}
-,
-		
-{
-	"id": "O08",
-	"phase": "optional",
-	"type": "scale",
-	"question": "How much would you enjoy controlling lots of creatures at once, each with their own abilities to keep track of?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"board_complexity": 3
-	},
-	"left": "I'd rather keep things simple",
-	"right": "I enjoy having lots to manage"
-}
-,
+		{
+			"id": "O05",
+			"phase": "optional",
+			"type": "select",
+			"question": "Which two abilities would you most want your deck to have?",
+			"maxSelections": 2,
+			"answers": [
+				{
+					"text": "Use huge creatures to deal massive amounts of damage",
+					"scores": {
+						"stompy": 3,
+						"combat": 1
+					}
+				},
+				{
+					"text": "Bring creatures back from the dead to use them again",
+					"scores": {
+						"graveyard": 3,
+						"resilience": 1
+					}
+				},
+				{
+					"text": "Build machines and inventions that work together to become more powerful",
+					"scores": {
+						"artifacts": 3,
+						"synergy": 1
+					}
+				},
+				{
+					"text": "Cast lots of spells to create different effects and combinations",
+					"scores": {
+						"spellslinger": 3,
+						"combo": 1
+					}
+				}
+			]
+		},
+		{
+			"id": "O06",
+			"phase": "optional",
+			"type": "single",
+			"question": "Which of these sounds the LEAST fun to play with?",
+			"answers": [
+				{
+					"text": "Gadgets and machines (artifacts) that just sit there and do stuff",
+					"scores": {
+						"artifacts": -3
+					}
+				},
+				{
+					"text": "Cards that stay out and quietly change the rules (enchantments)",
+					"scores": {
+						"enchantments": -3
+					}
+				},
+				{
+					"text": "Chaining a bunch of spells together in one turn",
+					"scores": {
+						"spellslinger": -3
+					}
+				},
+				{
+					"text": "Creatures that leave and come back so their 'when I show up' thing happens again",
+					"scores": {
+						"blink": -3
+					}
+				}
+			]
+		},
+		{
+			"id": "O07",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you rather build a team where every creature is the same type (all goblins, all zombies, whatever) and they boost each other, or just play the best creatures you can find?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"typal": 3
+			},
+			"left": "Best creatures, any type",
+			"right": "One matching team",
+			"mid": "A bit of both"
+		},
+		{
+			"id": "O08",
+			"phase": "optional",
+			"type": "scale",
+			"question": "How much would you enjoy controlling lots of creatures at once, each with their own abilities to keep track of?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"board_complexity": 3
+			},
+			"left": "I'd rather keep things simple",
+			"right": "I enjoy having lots to manage",
+			"mid": "A medium amount"
+		},
 		{
 			"id": "O09",
 			"phase": "optional",
 			"type": "single",
-			"question": "You can have one benefit that repeats each week. Which would you enjoy most?",
+			"question": "Which of these sounds the LEAST fun to build around?",
 			"answers": [
 				{
-					"text": "Something that keeps improving the environment around me.",
+					"text": "Bringing creatures back from the graveyard",
 					"scores": {
-						"enchantments": 3,
-						"counters": 1
+						"graveyard": -3
 					}
 				},
 				{
-					"text": "A growing supply of resources for future plans.",
+					"text": "Sacrificing my own creatures for a bonus",
 					"scores": {
-						"landfall": 3,
-						"midrange": 1
+						"sacrifice": -3
 					}
 				},
 				{
-					"text": "Quietly reducing the options available to my competition.",
+					"text": "Creatures that slowly get bigger over the whole game",
 					"scores": {
-						"mill": 3,
-						"attrition": 1
+						"counters": -3
 					}
 				},
 				{
-					"text": "Turning things I no longer need into useful rewards.",
+					"text": "Tons of tiny creature tokens",
 					"scores": {
-						"sacrifice": 3,
-						"life_drain": 1
+						"tokens": -3
 					}
 				}
 			]
 		},
-		
-{
-	"id": "O10",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather have creatures that start out strong or creatures that gradually grow stronger as you play?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"counters": 3,
-		"growth_preference": 1,
-		"stompy": -2
-	},
-	"left": "Start out strong",
-	"right": "Grow stronger over time"
-}
-,
-		
-{
-	"id": "O11",
-	"phase": "optional",
-	"type": "rank",
-	"question": "Rank these ways of getting more use out of your creatures, from most to least appealing.",
-	"answers": [
 		{
-			"text": "Bring creatures back from the graveyard after they die.",
+			"id": "O10",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you rather have creatures that start out strong or creatures that gradually grow stronger as you play?",
+			"min": 1,
+			"max": 10,
 			"scores": {
-				"graveyard": 3
-			}
+				"counters": 3,
+				"growth_preference": 1,
+				"stompy": -2
+			},
+			"left": "Start out strong",
+			"right": "Grow stronger over time",
+			"mid": "a bit of both"
 		},
 		{
-			"text": "Sacrifice creatures to gain additional benefits or activate powerful effects.",
+			"id": "O11",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank these ways of getting more use out of your creatures, from most to least appealing.",
+			"answers": [
+				{
+					"text": "Bring creatures back from the graveyard after they die",
+					"scores": {
+						"graveyard": 3
+					}
+				},
+				{
+					"text": "Sacrifice creatures to gain additional benefits or activate powerful effects",
+					"scores": {
+						"sacrifice": 3
+					}
+				},
+				{
+					"text": "Temporarily exile creatures and bring them back to activate their abilities again",
+					"scores": {
+						"blink": 3
+					}
+				},
+				{
+					"text": "Create copies of creatures to use their abilities multiple times",
+					"scores": {
+						"tokens": 3
+					}
+				}
+			]
+		},
+		{
+			"id": "O12",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you rather keep your creatures alive to continue using them, or sacrifice them to gain an advantage?",
+			"min": 1,
+			"max": 10,
 			"scores": {
 				"sacrifice": 3
-			}
+			},
+			"left": "Keep my creatures alive",
+			"right": "Sacrifice them for an advantage",
+			"mid": "Depends on the situation"
 		},
 		{
-			"text": "Temporarily exile creatures and bring them back to activate their abilities again.",
-			"scores": {
-				"blink": 3
-			}
+			"id": "O13",
+			"phase": "optional",
+			"type": "single",
+			"question": "Which of these ways of using cards sounds the most interesting to you?",
+			"answers": [
+				{
+					"text": "Use artifacts that work together to create stronger effects",
+					"scores": {
+						"artifacts": 3,
+						"synergy": 1
+					}
+				},
+				{
+					"text": "Use enchantments that stay on the battlefield and provide ongoing benefits",
+					"scores": {
+						"enchantments": 3
+					}
+				},
+				{
+					"text": "Cast multiple spells that build off one another for bigger effects",
+					"scores": {
+						"spellslinger": 3
+					}
+				},
+				{
+					"text": "Use creatures whose abilities activate when they enter the battlefield, then find ways to activate them again",
+					"scores": {
+						"blink": 2,
+						"value_engine": 1
+					}
+				}
+			]
 		},
 		{
-			"text": "Create copies of creatures to use their abilities multiple times.",
+			"id": "O14",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you rather play cards that have an immediate impact, or set up combinations of cards that generate more value every turn?",
+			"min": 1,
+			"max": 10,
 			"scores": {
-				"tokens": 3
-			}
-		}
-	]
-}
-,
-		
-{
-	"id": "O12",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather keep your creatures alive to continue using them, or sacrifice them to gain an advantage?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"sacrifice": 3
-	},
-	"left": "Keep my creatures alive",
-	"right": "Sacrifice them for an advantage"
-}
-,
-		
-{
-	"id": "O13",
-	"phase": "optional",
-	"type": "single",
-	"question": "Which of these ways of using cards sounds the most interesting to you?",
-	"answers": [
-		{
-			"text": "Use artifacts that work together to create stronger effects.",
-			"scores": {
-				"artifacts": 3,
-				"synergy": 1
-			}
+				"value_engine": 3,
+				"synergy": 2
+			},
+			"left": "Immediate impact",
+			"right": "Build up ongoing effects",
+			"mid": "A bit of both"
 		},
 		{
-			"text": "Use enchantments that stay on the battlefield and provide ongoing benefits.",
-			"scores": {
-				"enchantments": 3
-			}
+			"id": "O15",
+			"phase": "optional",
+			"type": "select",
+			"question": "Which two of these additional benefits would you most want your deck to generate?",
+			"maxSelections": 2,
+			"answers": [
+				{
+					"text": "Gain extra life as you play",
+					"scores": {
+						"lifegain": 3
+					}
+				},
+				{
+					"text": "Trigger special abilities whenever you play a land",
+					"scores": {
+						"landfall": 3
+					}
+				},
+				{
+					"text": "Generate extra rewards each turn from cards and abilities working together",
+					"scores": {
+						"value_engine": 3
+					}
+				},
+				{
+					"text": "Create additional creatures to help build your army",
+					"scores": {
+						"tokens": 3
+					}
+				}
+			]
 		},
 		{
-			"text": "Cast multiple spells that build off one another for bigger effects.",
-			"scores": {
-				"spellslinger": 3
-			}
+			"id": "O16",
+			"phase": "optional",
+			"type": "single",
+			"question": "When playing a game with other people, which sounds the most fun?",
+			"answers": [
+				{
+					"text": "Making deals and convincing other players to work with me",
+					"scores": {
+						"politics": 3,
+						"negotiation": 2
+					}
+				},
+				{
+					"text": "Paying attention to what everyone is doing and adjusting my plans",
+					"scores": {
+						"interaction": 2,
+						"adaptability": 2
+					}
+				},
+				{
+					"text": "Working toward my own goals without getting too involved in everyone else's plans",
+					"scores": {
+						"low_interaction": 3,
+						"consistency": 1
+					}
+				},
+				{
+					"text": "Getting everyone involved and creating fun moments together",
+					"scores": {
+						"social": 3
+					}
+				}
+			]
 		},
 		{
-			"text": "Use creatures whose abilities activate when they enter the battlefield, then find ways to activate them again.",
+			"id": "O17",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you rather focus on gaining life to stay in the game longer, or dealing damage to end the game faster?",
+			"min": 1,
+			"max": 10,
 			"scores": {
-				"blink": 2,
-				"value_engine": 1
-			}
-		}
-	]
-}
-,
-		
-{
-	"id": "O14",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather play cards that have an immediate impact, or set up combinations of cards that generate more value every turn?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"value_engine": 3,
-		"synergy": 2
-	},
-	"left": "Immediate impact",
-	"right": "Build up ongoing effects"
-}
-,
-		
-{
-	"id": "O15",
-	"phase": "optional",
-	"type": "select",
-	"question": "Which two of these additional benefits would you most want your deck to generate?",
-	"maxSelections": 2,
-	"answers": [
-		{
-			"text": "Gain extra life as you play.",
-			"scores": {
-				"lifegain": 3
-			}
+				"lifegain": 3,
+				"aggro": -2
+			},
+			"left": "Deal more damage",
+			"right": "Gain more life",
+			"mid": "A bit of both"
 		},
 		{
-			"text": "Trigger special abilities whenever you play a land.",
-			"scores": {
-				"landfall": 3
-			}
+			"id": "O18",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank these setbacks from MOST frustrating to LEAST frustrating.",
+			"answers": [
+				{
+					"text": "Losing the creatures I spent turns developing",
+					"scores": {
+						"loss_creatures": 3
+					}
+				},
+				{
+					"text": "Running out of cards and useful choices",
+					"scores": {
+						"loss_options": 3
+					}
+				},
+				{
+					"text": "Falling far behind in the first few turns",
+					"scores": {
+						"loss_early": 3
+					}
+				},
+				{
+					"text": "Never drawing the cards I need to make my strategy work",
+					"scores": {
+						"loss_setup": 3
+					}
+				}
+			]
 		},
 		{
-			"text": "Generate extra rewards each turn from cards and abilities working together.",
+			"id": "O19",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you be willing to help an opponent if you could negotiate something useful for yourself in return?",
+			"min": 1,
+			"max": 10,
 			"scores": {
-				"value_engine": 3
-			}
+				"negotiation": 3,
+				"politics": 2
+			},
+			"left": "I'd rather not help them",
+			"right": "I'd be open to making a deal",
+			"mid": "Depends on the deal"
 		},
 		{
-			"text": "Create additional creatures to help build your army.",
-			"scores": {
-				"tokens": 3
-			}
-		}
-	]
-}
-,
-		
-{
-	"id": "O16",
-	"phase": "optional",
-	"type": "single",
-	"question": "When playing a game with other people, which sounds the most fun?",
-	"answers": [
-		{
-			"text": "Making deals and convincing other players to work with me.",
-			"scores": {
-				"politics": 3,
-				"negotiation": 2
-			}
+			"id": "O20",
+			"phase": "optional",
+			"type": "single",
+			"question": "You've got a bunch of mana left at the end of your turn (that's the stuff you spend to cast things). What do you wish you could do with it?",
+			"answers": [
+				{
+					"text": "Draw a bunch of extra cards",
+					"scores": {
+						"value_engine": 3
+					}
+				},
+				{
+					"text": "Bring a creature back from the graveyard",
+					"scores": {
+						"graveyard": 3
+					}
+				},
+				{
+					"text": "Pay for a huge creature that just smashes stuff",
+					"scores": {
+						"stompy": 3
+					}
+				},
+				{
+					"text": "Hold it so i can stop whatever they do next",
+					"scores": {
+						"control": 3,
+						"interaction": 1
+					}
+				}
+			]
 		},
 		{
-			"text": "Paying attention to what everyone is doing and adjusting my plans.",
-			"scores": {
-				"interaction": 2,
-				"adaptability": 2
-			}
+			"id": "O21",
+			"phase": "optional",
+			"type": "rank",
+			"question": "Rank these ways of winning a game from MOST satisfying to LEAST satisfying.",
+			"answers": [
+				{
+					"text": "Defeat opponents by attacking with my creatures",
+					"scores": {
+						"combat": 3
+					}
+				},
+				{
+					"text": "Deal damage directly to opponents using spells and abilities",
+					"scores": {
+						"burn": 3
+					}
+				},
+				{
+					"text": "Gradually drain opponents' life while gaining life myself",
+					"scores": {
+						"life_drain": 3
+					}
+				},
+				{
+					"text": "Make opponents run out of cards in their libraries",
+					"scores": {
+						"mill": 3
+					}
+				}
+			]
 		},
 		{
-			"text": "Working toward my own goals without getting too involved in everyone else's plans.",
+			"id": "O22",
+			"phase": "optional",
+			"type": "scale",
+			"question": "Would you rather overpower your opponents with strong plays, or gradually weaken their position until they struggle to fight back?",
+			"min": 1,
+			"max": 10,
 			"scores": {
-				"low_interaction": 3,
-				"consistency": 1
-			}
+				"attrition": 3
+			},
+			"left": "Overpower them",
+			"right": "Wear down their resources",
+			"mid": "A mix"
 		},
 		{
-			"text": "Getting everyone involved and creating fun moments together.",
-			"scores": {
-				"social": 3
-			}
-		}
-	]
-}
-,
-		
-{
-	"id": "O17",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather focus on gaining life to stay in the game longer, or dealing damage to end the game faster?",
-	"min": 1,
-	"max": 10,
-	"scores": {
-		"lifegain": 3,
-		"aggro": -2
-	},
-	"left": "Deal more damage",
-	"right": "Gain more life"
-}
-,
-		
-{
-	"id": "O18",
-	"phase": "optional",
-	"type": "rank",
-	"question": "Rank these setbacks from MOST frustrating to LEAST frustrating.",
-	"answers": [
-		{
-			"text": "Losing the creatures I spent turns developing.",
-			"scores": {
-				"loss_creatures": 3
-			}
+			"id": "O23",
+			"phase": "optional",
+			"type": "single",
+			"question": "An opponent plays a powerful card that's going to cause problems for you. What would you rather do?",
+			"answers": [
+				{
+					"text": "Steal it and use it against them",
+					"scores": {
+						"theft": 3
+					}
+				},
+				{
+					"text": "Destroy it before it becomes a bigger problem",
+					"scores": {
+						"disruption": 3
+					}
+				},
+				{
+					"text": "Keep it from being useful without necessarily getting rid of it",
+					"scores": {
+						"control": 2,
+						"disruption": 1
+					}
+				},
+				{
+					"text": "Focus on building my own board and try to overcome it",
+					"scores": {
+						"low_interaction": 3
+					}
+				}
+			]
 		},
-		{
-			"text": "Running out of cards and useful choices.",
-			"scores": {
-				"loss_options": 3
-			}
-		},
-		{
-			"text": "Falling far behind in the first few turns.",
-			"scores": {
-				"loss_early": 3
-			}
-		},
-		{
-			"text": "Never drawing the cards I need to make my strategy work.",
-			"scores": {
-				"loss_setup": 3
-			}
-		}
-	]
-}
-,
-		
-{
-	"id": "O19",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you be willing to help an opponent if you could negotiate something useful for yourself in return?",
-	"scores": {
-		"negotiation": 3,
-		"politics": 2
-	},
-	"min": 1,
-	"max": 10,
-	"left": "I'd rather not help them",
-	"right": "I'd be open to making a deal"
-}
-,
-		
-{
-	"id": "O20",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather play a deck with straightforward abilities, or one where you have to figure out how lots of different cards work together?",
-	"scores": {
-		"complexity": 3,
-		"synergy": 1
-	},
-	"min": 1,
-	"max": 10,
-	"left": "Straightforward abilities",
-	"right": "Lots of interacting abilities"
-}
-,
-		
-{
-	"id": "O21",
-	"phase": "optional",
-	"type": "rank",
-	"question": "Rank these ways of winning a game from MOST satisfying to LEAST satisfying.",
-	"answers": [
-		{
-			"text": "Defeat opponents by attacking with my creatures.",
-			"scores": {
-				"combat": 3
-			}
-		},
-		{
-			"text": "Deal damage directly to opponents using spells and abilities.",
-			"scores": {
-				"burn": 3
-			}
-		},
-		{
-			"text": "Gradually drain opponents' life while gaining life myself.",
-			"scores": {
-				"life_drain": 3
-			}
-		},
-		{
-			"text": "Make opponents run out of cards in their libraries.",
-			"scores": {
-				"mill": 3
-			}
-		}
-	]
-}
-,
-		
-{
-	"id": "O22",
-	"phase": "optional",
-	"type": "scale",
-	"question": "Would you rather overpower your opponents with strong plays, or gradually weaken their position until they struggle to fight back?",
-	"scores": {
-		"attrition": 3
-	},
-	"min": 1,
-	"max": 10,
-	"left": "Overpower them",
-	"right": "Wear down their resources"
-}
-,
-		
-{
-	"id": "O23",
-	"phase": "optional",
-	"type": "single",
-	"question": "An opponent plays a powerful card that's going to cause problems for you. What would you rather do?",
-	"answers": [
-		{
-			"text": "Steal it and use it against them.",
-			"scores": {
-				"theft": 3
-			}
-		},
-		{
-			"text": "Destroy it before it becomes a bigger problem.",
-			"scores": {
-				"disruption": 3
-			}
-		},
-		{
-			"text": "Keep it from being useful without necessarily getting rid of it.",
-			"scores": {
-				"control": 2,
-				"disruption": 1
-			}
-		},
-		{
-			"text": "Focus on building my own board and try to overcome it.",
-			"scores": {
-				"low_interaction": 3
-			}
-		}
-	]
-}
-,
 		{
 			"id": "O24",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How appealing is making opponents discard cards or lose access to options?",
-			"scores": {
-				"disruption": 3,
-				"attrition": 1
-			},
+			"question": "How long do you want a game of Magic to last?",
 			"min": 1,
 			"max": 10,
-			"left": "Not appealing",
-			"right": "Very appealing"
+			"scores": {
+				"slow_pace": 3,
+				"fast_pace": -2
+			},
+			"left": "Quick, get it over with",
+			"right": "Long, let it play out",
+			"mid": "Depends on the game"
 		},
 		{
 			"id": "O25",
 			"phase": "optional",
 			"type": "select",
-			"question": "Which two surprising victory stories would you most want to experience?",
+			"question": "Which two ways of winning a game of Magic sound the most satisfying?",
 			"answers": [
 				{
-					"text": "A series of effects combine into a winning loop.",
+					"text": "Combine specific cards to pull off a powerful move that wins the game",
 					"scores": {
 						"combo_win": 3
 					}
 				},
 				{
-					"text": "I meet an unusual requirement that wins immediately.",
+					"text": "Win instantly by meeting a special condition on one of my cards",
 					"scores": {
 						"alternate_win": 3
 					}
 				},
 				{
-					"text": "My commander becomes the biggest threat on the table.",
+					"text": "Make my commander powerful enough to defeat opponents through its own combat damage",
 					"scores": {
 						"commander_damage": 3
 					}
 				},
 				{
-					"text": "An enormous coordinated attack finishes everyone.",
+					"text": "Build an army of creature tokens and overwhelm opponents with a massive attack",
 					"scores": {
 						"tokens": 2,
 						"combat": 2
@@ -1184,32 +1129,33 @@
 			"id": "O26",
 			"phase": "optional",
 			"type": "single",
-			"question": "A usual approach to a challenge stops working. What alternative would you try?",
+			"question": "Which of these cards would you be happiest to draw?",
 			"answers": [
 				{
-					"text": "Make your strongest existing approach even stronger.",
+					"text": "One that always does something solid and reliable",
+					"scores": {
+						"low_risk": 3,
+						"consistency": 1
+					}
+				},
+				{
+					"text": "A coin flip card: either amazing or it does nothing",
+					"scores": {
+						"high_risk": 3
+					}
+				},
+				{
+					"text": "One that's weak alone but incredible with the right other card",
+					"scores": {
+						"combo": 2,
+						"synergy": 2
+					}
+				},
+				{
+					"text": "One that is just big and strong and does exactly what it says",
 					"scores": {
 						"stompy": 2,
-						"combat": 2
-					}
-				},
-				{
-					"text": "Achieve small wins while maintaining your own energy.",
-					"scores": {
-						"life_drain": 3,
-						"lifegain": 1
-					}
-				},
-				{
-					"text": "Gradually reduce the other side’s future options.",
-					"scores": {
-						"mill": 3
-					}
-				},
-				{
-					"text": "Find a unique objective that bypasses the obstacle.",
-					"scores": {
-						"alternate_win": 3
+						"low_complexity": 2
 					}
 				}
 			]
@@ -1218,43 +1164,44 @@
 			"id": "O27",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How appealing is a card that lets you win by meeting a strange, specific condition?",
-			"scores": {
-				"alternate_win": 3
-			},
+			"question": "Making an opponent discard cards, or countering their spell right as they cast it. Is that your kind of fun?",
 			"min": 1,
 			"max": 10,
-			"left": "Not appealing",
-			"right": "Very appealing"
+			"scores": {
+				"disruption": 3
+			},
+			"left": "Not really my thing",
+			"right": "Love messing with plans",
+			"mid": "Fine sometimes"
 		},
 		{
 			"id": "O28",
 			"phase": "optional",
 			"type": "rank",
-			"question": "Rank ways you would prefer to manage an opposing threat.",
+			"question": "Rank these cards from the one you'd be MOST excited to draw to the LEAST.",
 			"answers": [
 				{
-					"text": "Prevent it before it happens",
+					"text": "A card that lets you sacrifice your own creatures for a big bonus",
 					"scores": {
-						"control": 3
+						"sacrifice": 3
 					}
 				},
 				{
-					"text": "Remove it after it appears",
+					"text": "A creature that gains you life whenever you do certain things",
 					"scores": {
-						"disruption": 3
+						"lifegain": 3
 					}
 				},
 				{
-					"text": "Steal it",
+					"text": "A spell that lets you take control of an opponent's best creature",
 					"scores": {
 						"theft": 3
 					}
 				},
 				{
-					"text": "Persuade another player to handle it",
+					"text": "A card that does something cool every time you play a land",
 					"scores": {
-						"politics": 3
+						"landfall": 3
 					}
 				}
 			]
@@ -1262,138 +1209,74 @@
 		{
 			"id": "O29",
 			"phase": "optional",
-			"type": "single",
-			"question": "Which behavior would you most want to discourage in a group game?",
-			"answers": [
-				{
-					"text": "Someone constantly targeting you.",
-					"scores": {
-						"control": 2,
-						"resilience": 1
-					}
-				},
-				{
-					"text": "Someone taking too many turns or actions in a row.",
-					"scores": {
-						"control": 2,
-						"disruption": 1
-					}
-				},
-				{
-					"text": "Someone accumulating advantages without sharing opportunities.",
-					"scores": {
-						"disruption": 2,
-						"life_drain": 1
-					}
-				},
-				{
-					"text": "Someone crowding everyone else out of the activity.",
-					"scores": {
-						"control": 2,
-						"burn": 1
-					}
-				}
-			]
+			"type": "scale",
+			"question": "Would you rather play cards that help everyone at the table (while you quietly steer things), or cards that just help you?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"social": 2,
+				"politics": 2
+			},
+			"left": "Just help me",
+			"right": "Help everybody",
+			"mid": "A bit of both"
 		},
 		{
 			"id": "O30",
 			"phase": "optional",
 			"type": "scale",
 			"question": "How fun would it be to play cards borrowed or stolen from your opponents?",
+			"min": 1,
+			"max": 10,
 			"scores": {
 				"theft": 3
 			},
-			"min": 1,
-			"max": 10,
 			"left": "Not appealing",
-			"right": "Very appealing"
+			"right": "Very appealing",
+			"mid": "Kinda fun"
 		},
 		{
 			"id": "O31",
 			"phase": "optional",
-			"type": "rank",
-			"question": "Rank what would make completing a difficult challenge feel best.",
-			"answers": [
-				{
-					"text": "Finish before anyone expects me to.",
-					"scores": {
-						"aggro": 3,
-						"fast_pace": 2
-					}
-				},
-				{
-					"text": "Know my approach was dependable the whole time.",
-					"scores": {
-						"consistency": 3,
-						"midrange": 1
-					}
-				},
-				{
-					"text": "Pull off a clever solution that took planning.",
-					"scores": {
-						"combo_win": 3,
-						"combo": 2
-					}
-				},
-				{
-					"text": "Persevere through setbacks and finally succeed.",
-					"scores": {
-						"attrition": 3,
-						"resilience": 1
-					}
-				}
-			]
+			"type": "scale",
+			"question": "Would you rather win because you outplayed everyone, or because you talked everyone into doing what you wanted?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"negotiation": 3,
+				"politics": 2
+			},
+			"left": "Outplayed them",
+			"right": "Talked them into it",
+			"mid": "a bit of both"
 		},
 		{
 			"id": "O32",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How comfortable are you with turns involving lots of decisions and triggered abilities?",
-			"scores": {
-				"complexity": 3,
-				"low_complexity": -3,
-				"decision_density": 2
-			},
+			"question": "Would you rather load your commander up with gear (equipment and auras) to make it a monster, or let your creatures grow on their own?",
 			"min": 1,
 			"max": 10,
-			"left": "Prefer fewer decisions",
-			"right": "Enjoy tracking everything"
+			"scores": {
+				"voltron": 3
+			},
+			"left": "Let them grow on their own",
+			"right": "Load one up with gear",
+			"mid": "Either's fine"
 		},
 		{
 			"id": "O33",
 			"phase": "optional",
-			"type": "single",
-			"question": "You can invest in one long-term personal project. Which approach sounds most rewarding?",
-			"answers": [
-				{
-					"text": "Make dependable progress through a repeatable routine.",
-					"scores": {
-						"consistency": 3,
-						"value_engine": 1
-					}
-				},
-				{
-					"text": "Build layers of lasting improvements on what you have.",
-					"scores": {
-						"enchantments": 3,
-						"synergy": 1
-					}
-				},
-				{
-					"text": "Expand resources so bigger projects become possible.",
-					"scores": {
-						"landfall": 3,
-						"midrange": 1
-					}
-				},
-				{
-					"text": "Turn things you no longer need into fuel for the next step.",
-					"scores": {
-						"sacrifice": 3,
-						"value_engine": 1
-					}
-				}
-			]
+			"type": "scale",
+			"question": "Would you rather your commander (your deck's main character) win the game by attacking itself, or let your other cards do the winning while your commander helps out?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"commander_damage": 3
+			},
+			"left": "Commander helps, other cards win",
+			"right": "Commander does the hitting",
+			"mid": "a bit of both"
 		},
 		{
 			"id": "O34",
@@ -1408,91 +1291,70 @@
 				"slow_pace": -3
 			},
 			"left": "Patient starts are fine",
-			"right": "I want action quickly"
+			"right": "I want action quickly",
+			"mid": "Depends on the deck"
 		},
 		{
 			"id": "O35",
 			"phase": "optional",
-			"type": "select",
-			"question": "Pick the two moments you would most look forward to.",
-			"answers": [
-				{
-					"text": "Landing a decisive attack.",
-					"scores": {
-						"combat": 3
-					}
-				},
-				{
-					"text": "Getting a complicated system to work.",
-					"scores": {
-						"value_engine": 2,
-						"synergy": 2
-					}
-				},
-				{
-					"text": "Responding perfectly to an opponent’s move.",
-					"scores": {
-						"interaction": 3,
-						"control": 1
-					}
-				},
-				{
-					"text": "Discovering a strange combination.",
-					"scores": {
-						"combo": 2,
-						"synergy": 2
-					}
-				}
-			],
-			"maxSelections": 2
+			"type": "scale",
+			"question": "Would you rather attack with your creatures every single turn even if it leaves you open, or keep some back to defend?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"aggro": 3
+			},
+			"left": "Keep some back to defend",
+			"right": "Attack every turn",
+			"mid": "Depends on the board"
 		},
 		{
 			"id": "O36",
 			"phase": "optional",
-			"type": "single",
-			"question": "You and a friend are organizing an event together. How would you prefer to collaborate?",
-			"answers": [
-				{
-					"text": "Team up immediately if we want the same outcome.",
-					"scores": {
-						"politics": 2,
-						"social": 2
-					}
-				},
-				{
-					"text": "Agree on exactly what each of us will handle.",
-					"scores": {
-						"politics": 3,
-						"negotiation": 2
-					}
-				},
-				{
-					"text": "Work independently and combine our work at the end.",
-					"scores": {
-						"low_interaction": 3
-					}
-				},
-				{
-					"text": "Change roles depending on who needs the most help.",
-					"scores": {
-						"control": 1,
-						"adaptability": 2
-					}
-				}
-			]
+			"type": "scale",
+			"question": "Would you rather have a tight serious game where everyone's trying their hardest, or a goofy chaotic one where wierd stuff happens?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"social": 3
+			},
+			"left": "Tight and serious",
+			"right": "Goofy and chaotic",
+			"mid": "Depends on the group"
 		},
 		{
 			"id": "O37",
 			"phase": "optional",
-			"type": "scale",
-			"question": "How important is it to recover quickly after losing your main strategy?",
-			"min": 1,
-			"max": 10,
-			"scores": {
-				"resilience": 3
-			},
-			"left": "Not important",
-			"right": "Essential"
+			"type": "single",
+			"question": "Somebody casts a board wipe (a spell that destroys every creature, yours too). What would make you feel best?",
+			"answers": [
+				{
+					"text": "Bring all my creatures back from the graveyard",
+					"scores": {
+						"graveyard": 3,
+						"resilience": 1
+					}
+				},
+				{
+					"text": "Have more creatures ready in my hand to play right away",
+					"scores": {
+						"resilience": 3
+					}
+				},
+				{
+					"text": "Shrug it off and build something totally different",
+					"scores": {
+						"adaptability": 3
+					}
+				},
+				{
+					"text": "Stop the spell before it even happens",
+					"scores": {
+						"control": 3,
+						"interaction": 1
+					}
+				}
+			]
 		},
 		{
 			"id": "O38",
@@ -1501,26 +1363,26 @@
 			"question": "Rank the qualities that make a deck appealing to you.",
 			"answers": [
 				{
-					"text": "A straightforward strategy that is easy to operate.",
+					"text": "A straightforward strategy that is easy to operate",
 					"scores": {
 						"low_complexity": 3
 					}
 				},
 				{
-					"text": "Lots of technical choices and intricate decisions.",
+					"text": "Lots of technical choices and intricate decisions",
 					"scores": {
 						"complexity": 3
 					}
 				},
 				{
-					"text": "Wild swings and unpredictable outcomes.",
+					"text": "Wild swings and unpredictable outcomes",
 					"scores": {
 						"high_risk": 3,
 						"burst": 1
 					}
 				},
 				{
-					"text": "Reliable plans with opportunities to adapt.",
+					"text": "Reliable plans with opportunities to adapt",
 					"scores": {
 						"consistency": 3,
 						"adaptability": 1
@@ -1531,159 +1393,106 @@
 		{
 			"id": "O39",
 			"phase": "optional",
-			"type": "single",
-			"question": "Which kind of hobby would you most enjoy getting better at?",
-			"answers": [
-				{
-					"text": "One where practice leads to reliable, repeatable progress.",
-					"scores": {
-						"consistency": 3
-					}
-				},
-				{
-					"text": "One where you can try many different approaches.",
-					"scores": {
-						"adaptability": 3
-					}
-				},
-				{
-					"text": "One where unexpected surprises keep things interesting.",
-					"scores": {
-						"high_risk": 2,
-						"combo": 1
-					}
-				},
-				{
-					"text": "One where timing and reading other people matter most.",
-					"scores": {
-						"interaction": 2,
-						"control": 1
-					}
-				}
-			]
+			"type": "scale",
+			"question": "Would you rather stick to one game plan the whole game, or switch it up depending on what's happening?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"adaptability": 3
+			},
+			"left": "Stick to my plan",
+			"right": "Switch it up",
+			"mid": "Depends on the game"
 		},
 		{
 			"id": "O40",
 			"phase": "optional",
 			"type": "scale",
 			"question": "How much do you enjoy choosing when to act based on what other players do?",
+			"min": 1,
+			"max": 10,
 			"scores": {
 				"interaction": 2,
 				"low_interaction": -2,
 				"reactive_dependency": 2
 			},
-			"min": 1,
-			"max": 10,
 			"left": "Prefer my own timing",
-			"right": "Love responding to others"
+			"right": "Love responding to others",
+			"mid": "Depends on the game"
 		},
 		{
 			"id": "O41",
 			"phase": "optional",
-			"type": "single",
-			"question": "In a group activity, which role sounds most fun?",
-			"answers": [
-				{
-					"text": "Take the lead and be the person everyone notices.",
-					"scores": {
-						"stompy": 2,
-						"aggro": 1
-					}
-				},
-				{
-					"text": "Quietly work toward a surprise reveal.",
-					"scores": {
-						"setup": 3,
-						"combo": 1
-					}
-				},
-				{
-					"text": "Bring everyone together and help people cooperate.",
-					"scores": {
-						"politics": 3,
-						"social": 2
-					}
-				},
-				{
-					"text": "Keep things organized and step in when problems appear.",
-					"scores": {
-						"control": 3,
-						"interaction": 1
-					}
-				}
-			]
+			"type": "scale",
+			"question": "Would you rather lands just be lands, or build a deck around lands that make fun stuff happen when you play them?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"landfall": 3
+			},
+			"left": "Lands are just lands",
+			"right": "Build around lands",
+			"mid": "Either's fine"
 		},
 		{
 			"id": "O42",
 			"phase": "optional",
 			"type": "scale",
 			"question": "How appealing is a strategy that sometimes does very little before one huge payoff?",
+			"min": 1,
+			"max": 10,
 			"scores": {
 				"combo": 2,
 				"setup": 3,
 				"high_risk": 1
 			},
-			"min": 1,
-			"max": 10,
 			"left": "Not appealing",
-			"right": "Very appealing"
+			"right": "Very appealing",
+			"mid": "It's okay"
 		},
 		{
 			"id": "O43",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How appealing is a deck whose best plays depend on what your opponents have?",
+			"question": "Would you rather play a spell that does its thing once and is gone, or a card that stays out and quietly changes the rules (like 'all your creatures get +1/+1' or 'nobody can attack you for free')?",
+			"min": 1,
+			"max": 10,
 			"scores": {
-				"reactive_dependency": 3
+				"enchantments": 3
 			},
-			"left": "I want my own game plan",
-			"right": "I like adapting to them"
+			"left": "One and done",
+			"right": "Stays out and changes things",
+			"mid": "Either's fine"
 		},
 		{
 			"id": "O44",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How much would you enjoy making many small decisions each turn rather than one or two big decisions?",
+			"question": "Would you rather play a deck you can explain in one sentence, or one that takes a whole paragraph to explain how it wins?",
 			"min": 1,
 			"max": 10,
 			"scores": {
-				"decision_density": 3
+				"engine_complexity": 2,
+				"complexity": 2,
+				"low_complexity": -2
 			},
-			"left": "Prefer a few big choices",
-			"right": "Prefer many small choices"
+			"left": "One sentence",
+			"right": "A whole paragraph",
+			"mid": "Somewhere in between"
 		},
 		{
 			"id": "O45",
 			"phase": "optional",
-			"type": "single",
-			"question": "When learning a new activity, which would frustrate you most?",
-			"answers": [
-				{
-					"text": "Feeling like my efforts barely have an impact.",
-					"scores": {
-						"stompy": 2,
-						"combat": 1
-					}
-				},
-				{
-					"text": "Having to redo progress I already made.",
-					"scores": {
-						"resilience": 3
-					}
-				},
-				{
-					"text": "Trying to remember too many rules at once.",
-					"scores": {
-						"low_complexity": 3
-					}
-				},
-				{
-					"text": "Waiting too long before I get to do anything fun.",
-					"scores": {
-						"fast_pace": 3
-					}
-				}
-			]
+			"type": "scale",
+			"question": "Would you rather play a deck that does a bit of everything pretty well, or one that goes all in on one thing?",
+			"min": 1,
+			"max": 10,
+			"scores": {
+				"midrange": 3
+			},
+			"left": "All in on one thing",
+			"right": "A bit of everything",
+			"mid": "Depends on the deck"
 		}
 	],
 	"calibrationRevision": "v5-generic-draft"

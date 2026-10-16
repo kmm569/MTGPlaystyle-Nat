@@ -2,6 +2,7 @@ import {
 	initializeCloud,
 	saveCloud
 } from "./firebase.js";
+import { eggs } from "./eggs.js";
 const STORAGE_KEY = 'magic-playstyle-v4';
 
 // shows the "See Result Details" dropdown with every category percentage
@@ -420,9 +421,11 @@ function render() {
 			b.type = 'button';
 
 			b.onclick = () => {
+				const changed = responses[q.id] !== i;
 				responses[q.id] = i;
 				save();
 				render();
+				if (changed) checkEggs(q.id, i);
 			};
 
 			area.append(b);
@@ -665,6 +668,42 @@ function isSaveStage(q) {
 	return completed &&
 		q.phase === 'optional' &&
 		current === history.length - 1;
+}
+
+// easter eggs, the list lives in eggs.js
+function checkEggs(questionId, answerIndex) {
+	for (const egg of eggs) {
+		if (egg.question !== questionId) continue;
+		if (egg.answer !== answerIndex) continue;
+		if (egg.chance !== undefined && Math.random() > egg.chance) continue;
+
+		showEgg(egg);
+		return;
+	}
+}
+
+function showEgg(egg) {
+	const box = el('div', 'egg');
+
+	if (egg.image) {
+		const pic = el('img', 'egg-image');
+		pic.src = egg.image;
+		pic.alt = '';
+		box.append(pic);
+	}
+
+	if (egg.message) box.append(el('p', 'egg-message', egg.message));
+
+	function close() {
+		box.remove();
+		document.body.classList.remove('egg-gray');
+	}
+
+	box.onclick = close;
+	if (egg.gray) document.body.classList.add('egg-gray');
+	document.body.append(box);
+
+	setTimeout(close, (egg.seconds || 3) * 1000);
 }
 
 function renderReviewTools(q, optional) {

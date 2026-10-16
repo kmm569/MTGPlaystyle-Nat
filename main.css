@@ -805,3 +805,35 @@ textarea {
 	color: var(--muted);
 	font-weight: 400;
 }
+
+/* easter eggs */
+body.egg-gray main {
+	filter: grayscale(1);
+}
+
+.egg {
+	position: fixed;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 12px;
+	background: rgba(0, 0, 0, 0.55);
+	z-index: 1000;
+	cursor: pointer;
+}
+
+.egg-image {
+	max-width: 80vw;
+	max-height: 65vh;
+	border-radius: 8px;
+}
+
+.egg-message {
+	color: white;
+	font-size: 1.4rem;
+	font-weight: bold;
+	margin: 0;
+	text-align: center;
+}

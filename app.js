@@ -226,6 +226,8 @@ function initialHistory() {
 	current = 0;
 }
 
+const SPREAD = 1.3;
+
 function contribution(question, response) {
 	const out = {};
 
@@ -242,7 +244,7 @@ function contribution(question, response) {
 		add(question.scores, strength);
 
 	} else if (question.type === 'rank') {
-		const weights = [1, 0.55, 0.15, -0.2];
+		const weights = [1, 0.4, -0.4, -1];
 
 		response.forEach((index, position) => {
 			add(
@@ -252,15 +254,21 @@ function contribution(question, response) {
 		});
 
 	} else if (question.type === 'select') {
-		response.forEach(index => {
+		const rest = question.answers.length - response.length;
+		question.answers.forEach((answer, index) => {
 			add(
-				question.answers[index].scores,
-				1 / response.length
+				answer.scores,
+				response.includes(index)
+					? 1 / response.length
+					: (rest ? -0.5 / rest : 0)
 			);
 		});
 
 	} else {
-		add(question.answers[response].scores, 1);
+		const others = question.answers.length - 1;
+		question.answers.forEach((answer, index) => {
+			add(answer.scores, index === response ? 1 : -0.5 / others);
+		});
 	}
 
 	return out;
@@ -288,13 +296,17 @@ function scoreProfile() {
 	for (const stat of Object.values(output)) {
 		// Strength is independent of the number of questions answered.
 		// Evidence indicates how much support is behind that strength.
-		stat.percent = stat.opportunities
+		stat.raw = stat.opportunities
 			? Math.max(0, Math.min(100,
 				Math.round(50 + 50 * stat.points / stat.exposure)))
 			: 50;
+		// A category with only a question or two behind it is pulled toward 50,
+		// so it has to be backed by more answers before it can beat a well measured one.
+		const shrunk = 50 + (stat.raw - 50) * stat.opportunities / (stat.opportunities + 3);
+		stat.percent = Math.max(0, Math.min(100, Math.round(50 + (shrunk - 50) * SPREAD)));
 		stat.strength = stat.percent;
 		stat.evidence = Math.min(1, stat.opportunities / 4);
-		stat.rankScore = Math.round(50 + (stat.percent - 50) * (0.65 + 0.35 * stat.evidence));
+		stat.rankScore = stat.percent;
 		stat.confidence =
 			stat.opportunities >= 5 ? "More evidence" :
 			stat.opportunities >= 3 ? "Some evidence" :
@@ -886,8 +898,8 @@ function buildResultSummary(stats, make) {
 	const win = {
 		combat: ['Combat', 'You like winning by attacking with your creatures.'],
 		commander_damage: ['Commander damage', 'You like winning by hitting with one standout commander.'],
-		life_drain: ['Life drain', 'You like small advantages that slowly add up.'],
-		burn: ['Burn', 'You like a direct, exciting finish.'],
+		life_drain: ['Life drain', 'You like draining life from opponents and gaining it back yourself.'],
+		burn: ['Burn', 'You like finishing opponents off with spells that deal damage straight to them.'],
 		combo_win: ['Combo', 'You like making several things work together at just the right moment.'],
 		attrition: ['Attrition', 'You like outlasting everyone and wearing them down.'],
 		mill: ['Mill', 'You like winning by emptying out their deck.'],

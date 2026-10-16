@@ -967,7 +967,7 @@
 			"id": "O20",
 			"phase": "optional",
 			"type": "single",
-			"question": "You've got a bunch of mana left at the end of your turn (that's the stuff you spend to cast things). What do you wish you could do with it?",
+			"question": "You've got a bunch of mana left at the end of your turn, what would you want to do with it?",
 			"answers": [
 				{
 					"text": "Draw a bunch of extra cards",
@@ -1267,15 +1267,15 @@
 			"id": "O33",
 			"phase": "optional",
 			"type": "scale",
-			"question": "Would you rather your commander (your deck's main character) win the game by attacking itself, or let your other cards do the winning while your commander helps out?",
+			"question": "Do you enjoy taking your time to plan out your moves, or would you rather just cast your spells quickly and keep things moving?",
 			"min": 1,
 			"max": 10,
 			"scores": {
-				"commander_damage": 3
+				"decision_density": 3
 			},
-			"left": "Commander helps, other cards win",
-			"right": "Commander does the hitting",
-			"mid": "a bit of both"
+			"left": "Cast things quickly",
+			"right": "Plan it all out",
+			"mid": "Depends on the turn"
 		},
 		{
 			"id": "O34",
@@ -1370,7 +1370,8 @@
 				{
 					"text": "Lots of technical choices and intricate decisions",
 					"scores": {
-						"complexity": 3
+						"complexity": 3,
+						"decision_density": 2
 					}
 				},
 				{

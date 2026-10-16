@@ -215,7 +215,21 @@ async function connectCloud() {
 			"Firebase connection failed. Using local progress:",
 			error
 		);
+		window.cloudStatus = "connect FAILED: " + (error.code || error.message);
 	}
+}
+
+// add ?debug to the end of the page address to see if cloud saving is working
+function showDebugStatus() {
+	if (!location.search.includes('debug')) return;
+
+	const box = el('div', '');
+	box.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#222;color:#fff;font:12px monospace;padding:6px;z-index:2000';
+	document.body.append(box);
+
+	setInterval(() => {
+		box.textContent = 'cloud connected: ' + cloudReady + ' | ' + (window.cloudStatus || 'no save yet');
+	}, 500);
 }
 
 
@@ -762,6 +776,8 @@ function removeAnswer() {
 	const q = questionById(history[current]);
 	if (!completed || q.phase !== 'optional') return;
 
+	if (!confirm('Remove your answer to this question? You can answer it again later.')) return;
+
 	delete responses[q.id];
 	if (!removed.includes(q.id)) removed.push(q.id);
 
@@ -1195,6 +1211,7 @@ initialHistory();
 await connectCloud();
 
 bind();
+showDebugStatus();
 
 window.addEventListener("online", () => {
 	if (cloudReady) {

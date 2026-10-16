@@ -3,12 +3,7 @@
 	"coreCount": 15,
 	"optionalLimit": 25,
 	"categories": {
-		"Strategy": [
-			"aggro",
-			"midrange",
-			"control",
-			"combo"
-		],
+		"Strategy": ["aggro", "midrange", "control", "combo"],
 		"Mechanics": [
 			"stompy",
 			"tokens",
@@ -72,10 +67,10 @@
 			"id": "C01",
 			"phase": "core",
 			"type": "single",
-			"question": "You could be known for one EPIC talent. What would you choose?",
+			"question": "Which of these sounds like the most fun to pull off in a game?",
 			"answers": [
 				{
-					"text": "Being crazy powerful at one thing",
+					"text": "Making one creature absolutely massive and smashing someone with it",
 					"scores": {
 						"voltron": 3,
 						"commander_damage": 2,
@@ -83,7 +78,7 @@
 					}
 				},
 				{
-					"text": "Leading a big group that gets better together",
+					"text": "Building a huge team of creatures that all make each other better",
 					"scores": {
 						"tokens": 3,
 						"typal": 2,
@@ -91,14 +86,14 @@
 					}
 				},
 				{
-					"text": "Combining unrelated skills into something useful",
+					"text": "Chaining a bunch of spells together to set up something sneaky",
 					"scores": {
 						"combo": 3,
 						"spellslinger": 2
 					}
 				},
 				{
-					"text": "Seeing problems coming and deciding how situations unfold",
+					"text": "Sitting back and shutting down whatever everyone else is trying to do",
 					"scores": {
 						"control": 3,
 						"interaction": 2

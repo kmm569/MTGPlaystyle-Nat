@@ -14,6 +14,8 @@ let current = 0;
 let responses = {};
 let lastUpdatedAt = 0;
 let completed = false;
+// remembers which answer was last "saved" on the newest question during review (not stored anywhere)
+let savedMark = null;
 let retired = [];
 let removed = [];
 let cloudReady = false;
@@ -630,6 +632,11 @@ function render() {
 					: 'Continue'
 			);
 
+	if (isSaveStage(q)) {
+		$('nextBtn').textContent = savedMark === markFor(q) ? 'Finish' : 'Save';
+		$('nextBtn').disabled = !isAnswered(q);
+	}
+
 	$('resultsBtn').textContent = completed ? 'View Results' : 'Save and End';
 
 	$('resultsBtn').classList.toggle(
@@ -641,6 +648,25 @@ function render() {
 }
 
 // everything that only shows up once the quiz has been finished
+// optional questions still unused, plus ones that were removed and are sitting unanswered
+const unusedCount = () => bank.questions.filter(
+	x => x.phase === 'optional' && !history.includes(x.id)
+).length;
+
+const firstUnansweredOptional = () => history.findIndex(
+	id => questionById(id).phase === 'optional' &&
+		!isAnswered(questionById(id))
+);
+
+const markFor = q => `${q.id}:${JSON.stringify(responses[q.id])}`;
+
+// during review, the newest question on the end of the quiz uses a two step Save then Finish button
+function isSaveStage(q) {
+	return completed &&
+		q.phase === 'optional' &&
+		current === history.length - 1;
+}
+
 function renderReviewTools(q, optional) {
 	const nav = $('jumpNav');
 	const tools = $('reviewTools');
@@ -683,11 +709,13 @@ function renderReviewTools(q, optional) {
 
 	if (optional) $('removeBtn').disabled = !isAnswered(q);
 
-	const left = bank.questions.filter(
-		x => x.phase === 'optional' && !history.includes(x.id)
+	const left = unusedCount();
+	const openOnes = history.filter(
+		id => questionById(id).phase === 'optional' &&
+			!isAnswered(questionById(id))
 	).length;
 
-	$('newQuestionBtn').disabled = left === 0;
+	$('newQuestionBtn').disabled = left === 0 && openOnes === 0;
 	$('newQuestionBtn').textContent = `New Question (${left} left)`;
 }
 
@@ -707,10 +735,16 @@ function newQuestion() {
 	if (!completed) return;
 
 	const id = nextOptionalId();
-	if (!id) return;
 
-	history.push(id);
-	current = history.length - 1;
+	if (id) {
+		history.push(id);
+		current = history.length - 1;
+	} else {
+		// bank is used up, so bring her back to one she removed
+		const open = firstUnansweredOptional();
+		if (open < 0) return;
+		current = open;
+	}
 
 	save();
 	render();
@@ -720,6 +754,19 @@ function next() {
 	const q = questionById(history[current]);
 
 	if (!completed && !isAnswered(q)) return;
+
+	if (isSaveStage(q)) {
+		if (!isAnswered(q)) return;
+
+		// first click only saves and stays here, second click goes to results
+		if (savedMark !== markFor(q)) {
+			savedMark = markFor(q);
+			save();
+			return render();
+		}
+
+		return showResults();
+	}
 
 	if (
 		(current === bank.coreCount - 1 && history.length === bank.coreCount) ||
@@ -1000,11 +1047,15 @@ function showResults() {
 		2
 	);
 
+	const optionalUsed = history.filter(
+		id => questionById(id).phase === 'optional'
+	).length;
+
 	$('continueBtn').classList.toggle(
 		'hidden',
-		history.filter(
-			id => questionById(id).phase === 'optional'
-		).length >= bank.optionalLimit
+		completed
+			? unusedCount() === 0 && firstUnansweredOptional() < 0
+			: optionalUsed >= bank.optionalLimit
 	);
 }
 
@@ -1050,7 +1101,7 @@ function bind() {
 
 	$('resultsBtn').onclick = showResults;
 
-	$('continueBtn').onclick = refine;
+	$('continueBtn').onclick = () => (completed ? newQuestion() : refine());
 
 	$('reviewBtn').onclick = () => {
 		current = 0;
@@ -1076,43 +1127,6 @@ function bind() {
 
 	$('removeBtn').onclick = removeAnswer;
 	$('newQuestionBtn').onclick = newQuestion;
-
-	$('copyBtn').onclick = () => {
-		navigator.clipboard.writeText(
-			JSON.stringify(
-				{
-					responses,
-					profile: scoreProfile()
-				},
-				null,
-				2
-			)
-		)
-		.then(() => {
-			$('copyBtn').textContent = 'Copied';
-		})
-		.catch(() => {
-			alert('Copy failed');
-		});
-	};
-
-	
-$('resetBtn').onclick = () => {
-	if (!confirm('Start over and erase answers?')) {
-		return;
-	}
-
-	history = [];
-	responses = {};
-	completed = false;
-	retired = [];
-	removed = [];
-	current = 0;
-
-	initialHistory();
-	save();
-	render();
-};
 
 }
 

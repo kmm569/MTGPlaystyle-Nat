@@ -78,7 +78,9 @@ function isValidResponse(question, response) {
 	}
 
 	if (question.type === "scale") {
-		return Number.isInteger(response)
+		// the slider saves decimals like 7.34
+		return typeof response === "number"
+			&& Number.isFinite(response)
 			&& response >= 1
 			&& response <= 10;
 	}
@@ -225,7 +227,17 @@ function getProgress(session) {
 		.filter(q => isValidResponse(q, responses[q.id]))
 		.length;
 
-	return { core, optional, total: core + optional };
+	// questions can be added after finishing, so count what the session actually has
+	const optionalAsked = (session.history || []).filter(id =>
+		questionById(id)?.phase === "optional"
+	).length;
+
+	return {
+		core,
+		optional,
+		optionalAsked: Math.max(bank.optionalLimit || 25, optionalAsked),
+		total: core + optional
+	};
 }
 
 function formatDate(timestamp) {
@@ -261,6 +273,7 @@ async function loadSessions() {
 		) {
 			selectedSession = null;
 			$("sessionDetails").classList.add("hidden");
+			$("sessionList").classList.remove("hidden");
 		}
 
 		renderSessionList();
@@ -292,129 +305,263 @@ function renderSessionList() {
 		return;
 	}
 
-	sessions.forEach((session, index) => {
-		const progress = getProgress(session);
+	// group sessions by device, newest activity first
+	const groups = new Map();
 
-		const selected =
-			selectedSession?.id === session.id;
+	for (const session of sessions) {
+		const key = session.deviceId || "unknown";
 
-		const button = element(
-			"button",
-			"session-button" + (selected ? " selected" : "")
-		);
+		if (!groups.has(key)) groups.set(key, []);
+		groups.get(key).push(session);
+	}
 
-		button.type = "button";
+	for (const [key, items] of groups) {
+		const label = items[0].device?.label || "Unknown device";
+		const tag = key === "unknown" ? "" : ` (${key.slice(0, 8)})`;
 
-		const heading = element(
-			"strong",
-			"",
-			`Session ${index + 1}`
-		);
-
-		const description = element(
+		list.append(element(
 			"div",
 			"admin-muted",
-			`${progress.core}/15 core · ` +
-			`${progress.optional}/25 optional · ` +
-			formatDate(session.updatedAt)
-		);
+			`${label}${tag} · ${items.length} session${items.length === 1 ? "" : "s"}`
+		));
 
-		button.append(heading, description);
+		items.forEach((session, index) => {
+			const progress = getProgress(session);
 
-		button.onclick = () => showSession(session);
+			const selected =
+				selectedSession?.id === session.id;
 
-		list.append(button);
-	});
+			const button = element(
+				"button",
+				"session-button" + (selected ? " selected" : "")
+			);
+
+			button.type = "button";
+
+			const heading = element(
+				"strong",
+				"",
+				`Session ${index + 1}` + (session.completed ? " · finished" : "")
+			);
+
+			const description = element(
+				"div",
+				"admin-muted",
+				`${progress.core}/15 core · ` +
+				`${progress.optional}/${progress.optionalAsked} optional · ` +
+				formatDate(session.updatedAt)
+			);
+
+			button.append(heading, description);
+
+			button.onclick = () => showSession(session);
+
+			list.append(button);
+		});
+	}
 }
 
 function buildResultSummary(stats, make) {
 	const root = make('div', 'playstyle-summary');
-	const sorted = (keys) => keys
-		.filter(key => stats[key]?.opportunities > 0)
-		.sort((a, b) => stats[b].rankScore - stats[a].rankScore || stats[b].percent - stats[a].percent);
-	const available = keys => sorted(keys)[0] || null;
-	const note = (heading, label, description) => {
-		const section = make('section', 'group');
-		section.append(
-			make('h3', '', heading),
-			make('strong', '', label),
-			make('p', 'hint', description)
+
+	// top 3 per group by the scoring's own ranking; anything tied for first is always included
+	const SEP = ' \u2022 ';
+	const top = (table) => {
+		const ranked = Object.keys(table)
+			.filter(key => stats[key]?.opportunities > 0)
+			.sort((x, y) => stats[y].rankScore - stats[x].rankScore || stats[y].percent - stats[x].percent);
+
+		if (!ranked.length) return { lead: [], rest: [] };
+
+		const first = stats[ranked[0]];
+		const same = (n, m) => Math.abs(n - m) < 0.01;
+
+		const lead = ranked.filter(key =>
+			same(stats[key].rankScore, first.rankScore) &&
+			same(stats[key].percent, first.percent)
 		);
+
+		const rest = ranked.slice(lead.length, Math.max(3, lead.length));
+
+		return { lead, rest };
+	};
+
+	const show = (heading, table) => {
+		const { lead, rest } = top(table);
+		const section = make('section', 'group');
+		section.append(make('h3', '', heading));
+
+		if (!lead.length) {
+			section.append(
+				make('strong', '', 'Not enough info yet'),
+				make('p', 'hint', 'Answer a few more questions to see this one.')
+			);
+			root.append(section);
+			return;
+		}
+
+		const text = key => `${table[key][0]} \u00b7 ${Math.round(stats[key].percent)}%`;
+
+		const line = make('div', 'result-line');
+		line.append(make('strong', '', lead.map(text).join(SEP)));
+
+		if (rest.length) {
+			line.append(make('span', 'result-others', SEP + rest.map(text).join(SEP)));
+		}
+
+		section.append(line);
+
+		for (const key of lead) {
+			section.append(make('p', 'hint', table[key][1]));
+		}
+
 		root.append(section);
 	};
+
 	const strategy = {
-		aggro: ['The Go-Getter', 'You like getting started and making things happen.'],
-		midrange: ['The Builder', 'You like making steady progress and getting stronger as you go.'],
-		control: ['The Planner', 'You like thinking ahead and having an answer when things change.'],
-		combo: ['The Puzzle Solver', 'You like putting pieces together and seeing a plan work out.']
+		aggro: ['Aggro', 'You like getting started fast and making things happen.'],
+		midrange: ['Midrange', 'You like making steady progress and getting stronger as you go.'],
+		control: ['Control', 'You like thinking ahead and having an answer when things change.'],
+		combo: ['Combo', 'You like putting pieces together and seeing a plan work out.']
 	};
+
+	const mechanics = {
+		stompy: ['Big creatures', 'You like big creatures that win fights.'],
+		tokens: ['Lots of small creatures', 'You like filling the board with a big team.'],
+		counters: ['Growing things', 'You like watching your stuff get bigger over time.'],
+		voltron: ['One main character', 'You like putting everything into one creature.'],
+		graveyard: ['Second chances', 'You like bringing things back from the graveyard.'],
+		sacrifice: ['Trading things for rewards', 'You like giving things up to get something better.'],
+		spellslinger: ['Casting lots of spells', 'You like chaining spells together.'],
+		artifacts: ['Artifacts', 'You like clever gadgets doing their thing.'],
+		enchantments: ['Lasting effects', 'You like cards that stay out and change the rules.'],
+		politics: ['Making deals', 'You like talking and trading favors with the table.'],
+		disruption: ['Getting in the way', 'You like messing with what other people are trying to do.'],
+		theft: ['Borrowing tricks', "You like using other people's stuff against them."],
+		typal: ['A matching team', 'You like a team of creatures that are all the same kind.'],
+		lifegain: ['Gaining life', 'You like staying healthy and hard to kill.'],
+		landfall: ['Playing lands', 'You like getting rewarded every time you play a land.'],
+		blink: ['Reusing abilities', 'You like making creatures leave and come back to use their abilities again.'],
+		value_engine: ['Getting extra value', 'You like cards that keep giving you more.'],
+		synergy: ['Connecting the pieces', 'You like cards that work really well together.']
+	};
+
 	const win = {
-		combat: ['Winning Together', 'You like building up a group and seeing it succeed.'],
-		commander_damage: ['One Big Star', 'You like putting your effort into one standout character.'],
-		life_drain: ['Little by Little', 'You like small advantages that really add up.'],
-		burn: ['A Big Finish', 'You like a direct, exciting finish.'],
-		combo_win: ['The Perfect Combination', 'You like making several things work together at just the right moment.'],
-		attrition: ['Outlasting Everyone', 'You like sticking around and making steady progress.'],
-		mill: ['An Unexpected Route', 'You like finding a different way to get to the finish line.'],
-		alternate_win: ['A Secret Plan', 'You like winning by doing something unusual.']
+		combat: ['Combat', 'You like winning by attacking with your creatures.'],
+		commander_damage: ['Commander damage', 'You like winning by hitting with one standout commander.'],
+		life_drain: ['Life drain', 'You like small advantages that slowly add up.'],
+		burn: ['Burn', 'You like a direct, exciting finish.'],
+		combo_win: ['Combo', 'You like making several things work together at just the right moment.'],
+		attrition: ['Attrition', 'You like outlasting everyone and wearing them down.'],
+		mill: ['Mill', 'You like winning by emptying out their deck.'],
+		alternate_win: ['Alternate win', 'You like winning by doing something unusual.']
 	};
-	const names = {
-		stompy:'Big creatures', tokens:'Making a big team', counters:'Growing things',
-		voltron:'One main character', graveyard:'Second chances', sacrifice:'Trading things for rewards',
-		spellslinger:'Casting lots of spells', artifacts:'Clever gadgets', enchantments:'Lasting effects',
-		politics:'Making deals', disruption:'Changing plans', theft:'Borrowing tricks',
-		typal:'A matching team', lifegain:'Staying healthy', landfall:'Building resources',
-		blink:'Reusing abilities', value_engine:'Getting extra value', synergy:'Connecting the pieces'
+
+	const style = {
+		fast_pace: ['Fast games', 'You like games that move quickly.'],
+		slow_pace: ['Slow games', 'You like games that take their time and build up.'],
+		interaction: ['Interacting a lot', 'You like being in the middle of what everyone else is doing.'],
+		low_interaction: ['Doing your own thing', 'You like focusing on your own plan.'],
+		complexity: ['Lots of moving parts', 'You like having plenty to think about and keep track of.'],
+		low_complexity: ['Keeping it simple', 'You like games that are easy to follow.'],
+		decision_density: ['Lots of choices', 'You like having a decision to make every turn.'],
+		high_risk: ['Taking big risks', 'You like plays that could go really well or really badly.'],
+		low_risk: ['Playing it safe', 'You like steady plays you know will work.'],
+		consistency: ['Reliable games', 'You like decks that do what you expect them to.'],
+		resilience: ['Bouncing back', 'You like coming back after things go wrong.'],
+		adaptability: ['Adapting on the fly', 'You like changing your plan to fit the game.'],
+		burst: ['Big explosive turns', 'You like saving up for one huge turn.'],
+		setup: ['Building up first', 'You like getting set up before the big stuff.'],
+		social: ['Being social', 'You like the table talk as much as the cards.']
 	};
-	const topStrategy = available(Object.keys(strategy));
-	if (topStrategy) note('YOUR MAIN PLAYSTYLE', ...strategy[topStrategy]);
-	else note('YOUR MAIN PLAYSTYLE', 'Still figuring it out', 'Answer a few more questions to see your style.');
 
-	const mechanics = sorted(Object.keys(names));
-	const supported = mechanics.filter(key => stats[key].opportunities >= 2 && stats[key].rankScore >= 55);
-	const favorites = (supported.length ? supported : mechanics).slice(0, 3).map(key => names[key]);
-	note('WHAT YOU ENJOY', favorites.join(' · ') || 'A little of everything',
-		'These are some of the things your answers leaned toward.');
-
-	const topWin = available(Object.keys(win));
-	if (topWin) note('YOUR FAVORITE WAY TO WIN', ...win[topWin]);
-
-	// Each category contributes only if it has actually been measured.
-	// Reverse-scored categories use (100 - score) to represent the opposite direction.
-	function combined(positive, negative) {
-		let sum = 0;
-		let weight = 0;
-		for (const key of positive) {
-			const s = stats[key];
-			if (!s || !s.opportunities) continue;
-			const w = Math.min(1, s.opportunities / 3);
-			sum += s.percent * w;
-			weight += w;
-		}
-		for (const key of negative) {
-			const s = stats[key];
-			if (!s || !s.opportunities) continue;
-			const w = Math.min(1, s.opportunities / 3);
-			sum += (100 - s.percent) * w;
-			weight += w;
-		}
-		return weight ? sum / weight : null;
-	}
-	const pacing = combined(['fast_pace', 'burst'], ['slow_pace', 'setup', 'consistency']);
-	if (pacing === null) note('YOUR PLAYING SPEED', 'A Little of Both', 'There is not enough information to pick a speed yet.');
-	else if (pacing < 40) note('YOUR PLAYING SPEED', 'Slow and Steady', 'You like taking your time and getting ready first.');
-	else if (pacing < 65) note('YOUR PLAYING SPEED', 'A Little of Both', 'You like a mix of planning and jumping right in.');
-	else note('YOUR PLAYING SPEED', 'Full Speed Ahead', 'You like getting started and keeping things moving.');
-
-	const complexity = combined(
-		['complexity', 'decision_density', 'board_complexity', 'engine_complexity'],
-		['low_complexity']
-	);
-	if (complexity === null) note('HOW YOU LIKE YOUR GAMES', 'Still Figuring It Out', 'A few more answers could help here.');
-	else if (complexity < 40) note('HOW YOU LIKE YOUR GAMES', 'Keep It Simple', 'You would rather have fun without too many things to track.');
-	else if (complexity < 65) note('HOW YOU LIKE YOUR GAMES', 'A Little Challenge', 'You like interesting choices without too much homework.');
-	else note('HOW YOU LIKE YOUR GAMES', 'Lots to Figure Out', 'You enjoy having plenty of little decisions and things to keep track of.');
+	show('YOUR LIKELY PLAYSTYLE', strategy);
+	show('WHAT YOU PROBABLY ENJOY', mechanics);
+	show('HOW YOU PROBABLY LIKE TO WIN', win);
+	show('HOW YOU PROBABLY LIKE TO PLAY', style);
 	return root;
+}
+
+// readable names for the frustration categories (display only, the scoring keys stay the same)
+const FRUSTRATION = {
+	loss_creatures: "Losing creatures she built up",
+	loss_options: "Running out of cards and options",
+	loss_early: "Falling behind early",
+	loss_setup: "Not drawing the cards she needs",
+	startup_frustration: "Slow starts"
+};
+
+function scoreRow(label, stat) {
+	const row = element("div", "score-row");
+	const header = element("div", "score-header");
+
+	header.append(
+		element("span", "", label),
+		element("strong", "", `${stat.percent}%`)
+	);
+
+	const track = element("div", "track");
+	const fill = element("div", "fill");
+
+	fill.style.width = `${stat.percent}%`;
+	track.append(fill);
+
+	row.append(
+		header,
+		track,
+		element(
+			"div",
+			"details",
+			`Strength ${stat.percent}% · ${stat.opportunities} question${stat.opportunities === 1 ? "" : "s"} · ${stat.confidence}`
+		)
+	);
+
+	return row;
+}
+
+function renderFrustrations(target, session, stats) {
+	const responses = session.responses || {};
+	const group = element("div", "group");
+
+	group.append(element("h3", "", "Most Frustrated By"));
+
+	const question = questionById("O18");
+	const ranking = responses.O18;
+
+	if (question && isValidResponse(question, ranking)) {
+		group.append(element(
+			"p",
+			"admin-muted",
+			"Her own ranking of setbacks, from most to least frustrating:"
+		));
+
+		ranking.forEach((index, position) => {
+			const suffix =
+				position === 0 ? "  (most frustrating)" :
+				position === ranking.length - 1 ? "  (least frustrating)" : "";
+
+			group.append(element(
+				"p",
+				"",
+				`${position + 1}. ${question.answers[index].text}${suffix}`
+			));
+		});
+	} else {
+		group.append(element("p", "admin-muted", "No answer to the setback ranking yet."));
+	}
+
+	const slow = stats.startup_frustration;
+
+	if (slow?.opportunities) {
+		group.append(element(
+			"p",
+			"admin-muted",
+			"How much slow starts bother her (from the slow start question):"
+		));
+		group.append(scoreRow(FRUSTRATION.startup_frustration, slow));
+	}
+
+	target.append(group);
 }
 
 function renderScores(session) {
@@ -424,45 +571,24 @@ function renderScores(session) {
 	const stats = calculateScores(session.responses || {});
 
 	target.append(buildResultSummary(stats, element));
+
+	renderFrustrations(target, session, stats);
+
 	target.append(element("h3", "", "Full Category Breakdown"));
 
 	for (const [groupName, categories] of Object.entries(bank.categories)) {
 		const group = element("div", "group");
 		group.append(element("h3", "", groupName));
 
+		// the frustration categories have their own section above
 		const ranked = [...categories]
+			.filter(category => !(category in FRUSTRATION))
 			.sort((a, b) =>
 				stats[b].rankScore - stats[a].rankScore || stats[b].percent - stats[a].percent
 			);
 
 		for (const category of ranked) {
-			const stat = stats[category];
-
-			const row = element("div", "score-row");
-			const header = element("div", "score-header");
-
-			header.append(
-				element("span", "", category.replaceAll("_", " ")),
-				element("strong", "", `${stat.percent}%`)
-			);
-
-			const track = element("div", "track");
-			const fill = element("div", "fill");
-
-			fill.style.width = `${stat.percent}%`;
-			track.append(fill);
-
-			row.append(
-				header,
-				track,
-				element(
-					"div",
-					"details",
-					`Strength ${stat.percent}% · ${stat.opportunities} questions · ${stat.confidence}`
-				)
-			);
-
-			group.append(row);
+			group.append(scoreRow(category.replaceAll("_", " "), stats[category]));
 		}
 
 		target.append(group);
@@ -513,13 +639,20 @@ function showSession(session) {
 
 	const progress = getProgress(session);
 
+	// open the session on its own screen instead of below the list
+	$("sessionList").classList.add("hidden");
 	$("sessionDetails").classList.remove("hidden");
 	$("sessionTitle").textContent = "Session Details";
+	window.scrollTo(0, 0);
 
 	$("sessionInfo").textContent =
 		`Session ID: ${session.id}\n` +
 		`Answered: ${progress.core}/15 core, ` +
-		`${progress.optional}/25 optional\n` +
+		`${progress.optional}/${progress.optionalAsked} optional\n` +
+			`Device: ${session.device?.label || "Unknown device"}` +
+			(session.deviceId ? ` (${session.deviceId.slice(0, 8)})\n` : "\n") +
+			`Screen: ${session.device?.screen || "?"} · ${session.device?.timezone || "?"}\n` +
+			`Finished: ${session.completed ? "yes" : "not yet"}\n` +
 		`Updated: ${formatDate(session.updatedAt)}`;
 
 	$("sessionInfo").style.whiteSpace = "pre-line";
@@ -587,6 +720,16 @@ async function initialize() {
 	});
 
 	$("refreshBtn").onclick = loadSessions;
+
+	$("backToListBtn").onclick = () => {
+		selectedSession = null;
+		$("sessionDetails").classList.add("hidden");
+		$("sessionList").classList.remove("hidden");
+		$("copySessionBtn").textContent = "Copy Session Data";
+
+		renderSessionList();
+		window.scrollTo(0, 0);
+	};
 	$("copySessionBtn").onclick = copySelectedSession;
 
 	$("logoutBtn").onclick = async () => {
@@ -607,6 +750,7 @@ async function initialize() {
 			sessions = [];
 			selectedSession = null;
 			$("sessionList").replaceChildren();
+			$("sessionList").classList.remove("hidden");
 			$("sessionDetails").classList.add("hidden");
 
 			if (user) {

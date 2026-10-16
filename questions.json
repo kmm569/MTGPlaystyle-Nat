@@ -159,7 +159,7 @@
 			"id": "C04",
 			"phase": "core",
 			"type": "rank",
-			"question": "Rank these deck styles from the one that sounds most like you to the least.",
+			"question": "Rank these ways of playing from the one you'd most want to do to the one you'd least want to do.",
 			"answers": [
 				{
 					"text": "Hit them early and fast and try to win before they're ready",
@@ -241,7 +241,7 @@
 			"id": "C07",
 			"phase": "core",
 			"type": "single",
-			"question": "You've got a free afternoon and not much money. What sounds best?",
+			"question": "Say you randomly end up with a little extra money, like a couple hundred bucks. What sounds best?",
 			"answers": [
 				{
 					"text": "Blow it all on one amazing thing right now",
@@ -788,8 +788,8 @@
 		{
 			"id": "O13",
 			"phase": "optional",
-			"type": "single",
-			"question": "Which of these ways of using cards sounds the most interesting to you?",
+			"type": "rank",
+			"question": "Rank these ways of using cards from the one that sounds most interesting to the one that sounds least.",
 			"answers": [
 				{
 					"text": "Use artifacts that work together to create stronger effects",
@@ -813,7 +813,7 @@
 				{
 					"text": "Use creatures whose abilities activate when they enter the battlefield, then find ways to activate them again",
 					"scores": {
-						"blink": 2,
+						"blink": 3,
 						"value_engine": 1
 					}
 				}
@@ -871,31 +871,30 @@
 			"id": "O16",
 			"phase": "optional",
 			"type": "single",
-			"question": "When playing a game with other people, which sounds the most fun?",
+			"question": "You're ahead in a game of Commander and it's your turn. What sounds best?",
 			"answers": [
 				{
-					"text": "Making deals and convincing other players to work with me",
+					"text": "Go all out and try to end the game right now",
 					"scores": {
-						"politics": 3,
-						"negotiation": 2
+						"fast_pace": 3
 					}
 				},
 				{
-					"text": "Paying attention to what everyone is doing and adjusting my plans",
+					"text": "Play it safe and protect my lead so nobody can catch up",
 					"scores": {
-						"interaction": 2,
-						"adaptability": 2
+						"low_risk": 3,
+						"control": 1
 					}
 				},
 				{
-					"text": "Working toward my own goals without getting too involved in everyone else's plans",
+					"text": "Keep building toward something even bigger, there's no rush",
 					"scores": {
-						"low_interaction": 3,
-						"consistency": 1
+						"slow_pace": 3,
+						"setup": 1
 					}
 				},
 				{
-					"text": "Getting everyone involved and creating fun moments together",
+					"text": "Ease up a little so everybody else can still have fun",
 					"scores": {
 						"social": 3
 					}
@@ -1164,14 +1163,14 @@
 			"id": "O27",
 			"phase": "optional",
 			"type": "scale",
-			"question": "Making an opponent discard cards, or countering their spell right as they cast it. Is that your kind of fun?",
+			"question": "How much do you like wrecking an opponent's plans, like making them discard cards or stopping a spell right as they cast it?",
 			"min": 1,
 			"max": 10,
 			"scores": {
 				"disruption": 3
 			},
 			"left": "Not really my thing",
-			"right": "Love messing with plans",
+			"right": "Love it",
 			"mid": "Fine sometimes"
 		},
 		{
@@ -1225,15 +1224,15 @@
 			"id": "O30",
 			"phase": "optional",
 			"type": "scale",
-			"question": "How fun would it be to play cards borrowed or stolen from your opponents?",
+			"question": "Would you rather win with your own cards, or by taking your opponents' best stuff and using it against them?",
 			"min": 1,
 			"max": 10,
 			"scores": {
 				"theft": 3
 			},
-			"left": "Not appealing",
-			"right": "Very appealing",
-			"mid": "Kinda fun"
+			"left": "My own cards",
+			"right": "Taking their stuff",
+			"mid": "Either's fine"
 		},
 		{
 			"id": "O31",

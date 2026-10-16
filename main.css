@@ -708,3 +708,100 @@ select,
 textarea {
 	font-family: "Trebuchet MS", Verdana, sans-serif;
 }
+/* quiz buttons: back and save on the left, continue on the right */
+#backBtn { order: 1; }
+#resultsBtn { order: 2; }
+#nextBtn { order: 3; margin-left: auto; }
+
+.full-breakdown { margin-top: 24px; }
+
+@media (max-width: 600px) {
+	#nextBtn { margin-left: 0; }
+}
+
+/* review mode: jump list and swap tools, only shown once the quiz is finished */
+.jump-nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 14px 0 4px;
+}
+
+.jump {
+	min-width: 34px;
+	min-height: 34px;
+	padding: 4px 8px;
+	font: 600 12px Arial, Helvetica, sans-serif;
+	border: 1px solid var(--border, #c4cad4);
+	border-radius: 2px;
+	background: transparent;
+	color: inherit;
+	cursor: pointer;
+}
+
+.jump.current {
+	background: var(--accent);
+	border-color: var(--accent);
+	color: #fff;
+}
+
+.jump.unanswered:not(.current) {
+	border-style: dashed;
+	opacity: 0.75;
+}
+
+.review-tools {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-top: 12px;
+}
+
+.review-tools.hidden {
+	display: none;
+}
+
+.jump-nav.hidden {
+	display: none;
+}
+
+/* New Question tab hanging off the bottom edge of the quiz box */
+.new-question-bar {
+	display: flex;
+	justify-content: center;
+	margin-top: -1px;
+}
+
+.new-question-bar button {
+	min-height: 36px;
+	padding: 8px 22px;
+	border-top-color: var(--panel);
+	border-radius: 0 0 6px 6px;
+}
+
+/* results page dropdown */
+.result-details {
+	margin-top: 22px;
+	border-top: 1px solid var(--border);
+	padding-top: 14px;
+}
+
+.result-details summary {
+	cursor: pointer;
+	font-weight: 700;
+	font-size: 14px;
+}
+
+.result-details .full-breakdown {
+	margin-top: 14px;
+}
+
+/* top 3 line on the results page */
+.result-line {
+	margin: 0 0 3px;
+}
+
+.result-others {
+	color: var(--muted);
+	font-weight: 400;
+}

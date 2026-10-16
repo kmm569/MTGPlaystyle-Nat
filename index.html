@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,6 +93,8 @@
 				<div id="progressBar"></div>
 			</div>
 
+			<div id="jumpNav" class="jump-nav hidden"></div>
+
 			<h2 id="questionText"></h2>
 
 			<div id="answers" class="answers"></div>
@@ -103,7 +104,15 @@
 				<button id="nextBtn" class="primary" type="button">Continue</button>
 				<button id="resultsBtn" class="secondary hidden" type="button">View Results</button>
 			</div>
+
+			<div id="reviewTools" class="review-tools hidden">
+				<button id="removeBtn" class="secondary" type="button">Remove Answer</button>
+			</div>
 		</section>
+
+		<div id="newQuestionBar" class="new-question-bar hidden">
+			<button id="newQuestionBtn" class="secondary" type="button">New Question</button>
+		</div>
 
 		<section id="results" class="form-box hidden">
 			<h2>Your Results</h2>
@@ -114,6 +123,8 @@
 			<div class="actions result-actions">
 				<button id="continueBtn" class="primary" type="button">Answer More Questions</button>
 				<button id="reviewBtn" class="secondary" type="button">Review Answers</button>
+				<button id="reviewCoreBtn" class="secondary hidden" type="button">Review Core Questions</button>
+				<button id="reviewOptionalBtn" class="secondary hidden" type="button">Review Optional Questions</button>
 				<button id="copyBtn" class="secondary" type="button">Copy Results</button>
 				<button id="resetBtn" class="secondary" type="button">Start Over</button>
 			</div>

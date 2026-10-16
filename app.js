@@ -4,11 +4,18 @@ import {
 } from "./firebase.js";
 const STORAGE_KEY = 'magic-playstyle-v4';
 
+// shows the "See Result Details" dropdown with every category percentage
+// set to false to hide it from the results page
+const SHOW_ALL_PERCENTS = true;
+
 let bank;
 let history = [];
 let current = 0;
 let responses = {};
 let lastUpdatedAt = 0;
+let completed = false;
+let retired = [];
+let removed = [];
 let cloudReady = false;
 
 const $ = id => document.getElementById(id);
@@ -25,12 +32,42 @@ const isAnswered = q => {
 };
 
 
+// drops saved answers that no longer fit their question,
+// like a question that changed from single choice to rank
+function cleanResponses(raw) {
+	const out = {};
+
+	for (const [id, value] of Object.entries(raw || {})) {
+		const q = questionById(id);
+		if (!q) continue;
+
+		const count = (q.answers || []).length;
+		const ok =
+			q.type === 'rank'
+				? Array.isArray(value) && value.length === count &&
+					value.every(i => Number.isInteger(i) && i >= 0 && i < count)
+				: q.type === 'select'
+					? Array.isArray(value) && value.every(i => Number.isInteger(i) && i >= 0 && i < count)
+					: q.type === 'scale'
+						? typeof value === 'number' && value >= 1 && value <= 10
+						: Number.isInteger(value) && value >= 0 && value < count;
+
+		if (ok) out[id] = value;
+	}
+
+	return out;
+}
+
+
 function getQuizState() {
 	return {
 		questionBankVersion: bank.version,
 		responses: structuredClone(responses),
 		history: [...history],
 		current,
+		completed,
+		retired: [...retired],
+		removed: [...removed],
 		clientUpdatedAt: lastUpdatedAt
 	};
 }
@@ -59,6 +96,16 @@ function save() {
 }
 
 
+// restores the review related state (finished flag, swapped out questions)
+function applyExtras(data) {
+	const valid = new Set(bank.questions.map(q => q.id));
+
+	completed = data.completed === true;
+	retired = (data.retired || []).filter(id => valid.has(id));
+	removed = (data.removed || []).filter(id => valid.has(id));
+}
+
+
 function load() {
 	try {
 		const data = JSON.parse(
@@ -73,9 +120,11 @@ function load() {
 			bank.questions.map(q => q.id)
 		);
 
-		responses = Object.fromEntries(
-			Object.entries(data.responses || {})
-				.filter(([id]) => valid.has(id))
+		responses = cleanResponses(
+			Object.fromEntries(
+				Object.entries(data.responses || {})
+					.filter(([id]) => valid.has(id))
+			)
 		);
 
 		history = (data.history || [])
@@ -90,6 +139,7 @@ function load() {
 		);
 
 		lastUpdatedAt = data.clientUpdatedAt || 0;
+		applyExtras(data);
 
 	} catch (error) {
 		console.error("Could not load local progress:", error);
@@ -105,9 +155,11 @@ function restoreCloudState(data) {
 		bank.questions.map(q => q.id)
 	);
 
-	responses = Object.fromEntries(
-		Object.entries(data.responses || {})
-			.filter(([id]) => valid.has(id))
+	responses = cleanResponses(
+		Object.fromEntries(
+			Object.entries(data.responses || {})
+				.filter(([id]) => valid.has(id))
+		)
 	);
 
 	history = (data.history || [])
@@ -122,6 +174,7 @@ function restoreCloudState(data) {
 	);
 
 	lastUpdatedAt = data.clientUpdatedAt || 0;
+	applyExtras(data);
 }
 
 async function connectCloud() {
@@ -185,7 +238,7 @@ function contribution(question, response) {
 	if (response === undefined) return out;
 
 	if (question.type === 'scale') {
-		const strength = (Number(response) <= 5 ? (Number(response) - 5) / 4 : (Number(response) - 5) / 5);
+		const strength = (Number(response) - 5.5) / 4.5;
 		add(question.scores, strength);
 
 	} else if (question.type === 'rank') {
@@ -285,7 +338,7 @@ function chooseOptionalQuestion(candidates, stats, bank) {
 }
 
 function nextOptionalId() {
-	const used = new Set(history);
+	const used = new Set([...history, ...retired]);
 	const candidates = bank.questions.filter(q => q.phase === 'optional' && !used.has(q.id));
 	return chooseOptionalQuestion(candidates, scoreProfile(), bank)?.id || null;
 }
@@ -314,13 +367,22 @@ function render() {
 		? 'OPTIONAL QUESTIONS'
 		: 'CORE QUESTIONS';
 
+	// which optional question this is, counting from the first one
+	const optionalPos = history
+		.slice(0, current + 1)
+		.filter(id => questionById(id).phase === 'optional')
+		.length;
+
+	// added questions in review mode push the total past the limit
+	const optionalTotal = Math.max(bank.optionalLimit, optionalSeen);
+
 	$('questionNumber').textContent = optional
-		? `${optionalSeen} / ${bank.optionalLimit}`
+		? `${optionalPos} / ${optionalTotal}`
 		: `${current + 1} / ${bank.coreCount}`;
 
 	$('progressBar').style.width = `${100 * (
 		optional
-			? optionalSeen / bank.optionalLimit
+			? optionalPos / optionalTotal
 			: (current + 1) / bank.coreCount
 	)}%`;
 
@@ -397,72 +459,48 @@ function render() {
 	} else if (q.type === 'scale') {
 		const value = responses[q.id];
 
-		const label = el(
-			'div',
-			'scale-value',
-			value === undefined
-				? 'Choose a rating'
-				: `${value} / 10`
-		);
-
-		// whole numbers 1 to 10, but 5 sits dead center on the track
-		// (4 stops on the left, 5 on the right, spaced a little different)
-		const stops = [0, 12.5, 25, 37.5, 50, 60, 70, 80, 90, 100];
-		const rating = pos => stops.indexOf(pos) + 1;
-		const nearest = pos => stops.reduce((best, s) =>
-			Math.abs(s - pos) < Math.abs(best - pos) ? s : best, stops[4]);
-
+		// smooth 1 to 10 slider, so 5.5 is the exact middle
+		// the number is stored to the hundredths but never shown
 		const range = el('input');
 
 		range.type = 'range';
-		range.min = '0';
-		range.max = '100';
-		range.step = 'any';
-		range.value = value ? stops[value - 1] : 50;
+		range.min = '1';
+		range.max = '10';
+		range.step = '0.01';
+		range.value = value ?? 5.5;
 
 		range.setAttribute('aria-label', q.question);
-		range.setAttribute('aria-valuemin', '1');
-		range.setAttribute('aria-valuemax', '10');
 
-		const commit = (snap) => {
-			const pos = snap ? nearest(Number(range.value)) : Number(range.value);
-			if (snap) range.value = pos;
-
-			const r = rating(nearest(pos));
-			responses[q.id] = r;
-			label.textContent = `${r} / 10`;
-			range.setAttribute('aria-valuenow', r);
+		const commit = () => {
+			responses[q.id] = Math.round(Number(range.value) * 100) / 100;
+			removed = removed.filter(id => id !== q.id);
 
 			save();
 			$('nextBtn').disabled = false;
 		};
 
-		// while dragging the thumb follows the mouse, then it snaps when let go
-		range.oninput = () => {
-			const r = rating(nearest(Number(range.value)));
-			responses[q.id] = r;
-			label.textContent = `${r} / 10`;
+		range.oninput = commit;
+
+		// leaving the slider on the middle counts as an answer without touching it
+		if (value === undefined && !removed.includes(q.id)) {
+			responses[q.id] = 5.5;
 			save();
-			$('nextBtn').disabled = false;
-		};
+		}
 
-		range.onpointerup = () => commit(true);
-		range.onchange = () => commit(true);
+		// lets people pick the middle without having to drag away and back
+		range.onpointerup = commit;
 
-		// arrow keys jump one number at a time
+		// the step is tiny, so arrow keys nudge by half a point instead
 		range.onkeydown = (e) => {
-			const now = stops.indexOf(nearest(Number(range.value)));
-			let next = null;
+			let delta = 0;
 
-			if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = Math.min(9, now + 1);
-			if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = Math.max(0, now - 1);
-			if (e.key === 'Home') next = 0;
-			if (e.key === 'End') next = 9;
-			if (next === null) return;
+			if (e.key === 'ArrowRight' || e.key === 'ArrowUp') delta = 0.5;
+			if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') delta = -0.5;
+			if (!delta) return;
 
 			e.preventDefault();
-			range.value = stops[next];
-			commit(false);
+			range.value = Math.max(1, Math.min(10, Number(range.value) + delta));
+			commit();
 		};
 
 		const ends = el('div', 'scale-ends');
@@ -473,13 +511,14 @@ function render() {
 			el('span', '', q.right || 'Very appealing')
 		);
 
-		area.append(label, range, ends);
+		area.append(range, ends);
 
 	// Ranking questions
 
 	} else if (q.type === 'rank') {
-		const order = responses[q.id] ||
-			q.answers.map((_, i) => i);
+		const order = Array.isArray(responses[q.id])
+			? responses[q.id]
+			: q.answers.map((_, i) => i);
 
 		area.append(
 			el(
@@ -566,30 +605,112 @@ function render() {
 	}
 
 	$('backBtn').disabled = current === 0;
-	$('nextBtn').disabled = !isAnswered(q);
+	$('nextBtn').disabled = !completed && !isAnswered(q);
+
+	const isLast = current === history.length - 1;
 
 	$('nextBtn').textContent =
-		current === bank.coreCount - 1
+		current === bank.coreCount - 1 && history.length === bank.coreCount
 			? 'See Results'
 			: (
-				optional && optionalSeen >= bank.optionalLimit
+				optional && isLast && optionalSeen >= bank.optionalLimit
 					? 'Finish'
 					: 'Continue'
 			);
 
+	$('resultsBtn').textContent = completed ? 'View Results' : 'Save and End';
+
 	$('resultsBtn').classList.toggle(
 		'hidden',
-		!optional
+		!optional && !completed
 	);
+
+	renderReviewTools(q, optional);
+}
+
+// everything that only shows up once the quiz has been finished
+function renderReviewTools(q, optional) {
+	const nav = $('jumpNav');
+	const tools = $('reviewTools');
+
+	nav.classList.toggle('hidden', !completed);
+	tools.classList.toggle('hidden', !completed);
+	$('newQuestionBar').classList.toggle('hidden', !completed);
+
+	// once finished, the results button moves down next to Remove Answer
+	if (completed) tools.append($('resultsBtn'));
+	else document.querySelector('#quiz .actions').append($('resultsBtn'));
+
+	$('removeBtn').classList.toggle('hidden', !optional);
+
+	nav.replaceChildren();
+	if (!completed) return;
+
+	const phase = optional ? 'optional' : 'core';
+	let number = 0;
+
+	history.forEach((id, index) => {
+		const item = questionById(id);
+		if (item.phase !== phase) return;
+
+		number++;
+
+		const button = el('button', 'jump', String(number));
+		button.type = 'button';
+		button.title = `Question ${number}`;
+		button.classList.toggle('current', index === current);
+		button.classList.toggle('unanswered', !isAnswered(item));
+		button.onclick = () => {
+			current = index;
+			save();
+			render();
+		};
+
+		nav.append(button);
+	});
+
+	if (optional) $('removeBtn').disabled = !isAnswered(q);
+
+	const left = bank.questions.filter(
+		x => x.phase === 'optional' && !history.includes(x.id)
+	).length;
+
+	$('newQuestionBtn').disabled = left === 0;
+	$('newQuestionBtn').textContent = `New Question (${left} left)`;
+}
+
+function removeAnswer() {
+	const q = questionById(history[current]);
+	if (!completed || q.phase !== 'optional') return;
+
+	delete responses[q.id];
+	if (!removed.includes(q.id)) removed.push(q.id);
+
+	save();
+	render();
+}
+
+// adds one more optional question to the end of the quiz and jumps to it
+function newQuestion() {
+	if (!completed) return;
+
+	const id = nextOptionalId();
+	if (!id) return;
+
+	history.push(id);
+	current = history.length - 1;
+
+	save();
+	render();
 }
 
 function next() {
 	const q = questionById(history[current]);
 
-	if (!isAnswered(q)) return;
+	if (!completed && !isAnswered(q)) return;
 
 	if (
-		current === bank.coreCount - 1 ||
+		(current === bank.coreCount - 1 && history.length === bank.coreCount) ||
 		(
 			q.phase === 'optional' &&
 			current === history.length - 1 &&
@@ -614,93 +735,187 @@ function next() {
 	render();
 }
 
+// readable names for the frustration categories, display only
+const FRUSTRATION_NAMES = {
+	loss_creatures: 'Frustrated by losing creatures',
+	loss_options: 'Frustrated by running out of options',
+	loss_early: 'Frustrated by falling behind early',
+	loss_setup: 'Frustrated by not drawing what I need',
+	startup_frustration: 'Frustrated by slow starts'
+};
+
+function buildFullBreakdown(stats) {
+	const root = el('div', 'full-breakdown');
+
+	for (const [group, keys] of Object.entries(bank.categories)) {
+		const section = el('div', 'group');
+		section.append(el('h3', '', group));
+
+		const rows = keys
+			.map(key => ({ key, s: stats[key] }))
+			.sort((a, b) =>
+				(a.key in FRUSTRATION_NAMES) - (b.key in FRUSTRATION_NAMES) ||
+				(b.s?.opportunities > 0) - (a.s?.opportunities > 0) ||
+				(b.s?.rankScore ?? 0) - (a.s?.rankScore ?? 0) ||
+				(b.s?.percent ?? 0) - (a.s?.percent ?? 0)
+			);
+
+		for (const { key, s } of rows) {
+			const name = FRUSTRATION_NAMES[key] || key.replaceAll('_', ' ');
+			const percent = s ? s.percent : 50;
+			const count = s ? s.opportunities : 0;
+
+			const row = el('div', 'score-row');
+			const header = el('div', 'score-header');
+
+			header.append(
+				el('span', '', name),
+				el('strong', '', `${percent}%`)
+			);
+
+			const track = el('div', 'track');
+			const fill = el('div', 'fill');
+
+			fill.style.width = `${percent}%`;
+			track.append(fill);
+
+			row.append(
+				header,
+				track,
+				el(
+					'div',
+					'details',
+					`Strength ${percent}% \u00b7 ${count} question${count === 1 ? '' : 's'} \u00b7 ${s ? s.confidence : 'Unexplored'}`
+				)
+			);
+
+			section.append(row);
+		}
+
+		root.append(section);
+	}
+
+	return root;
+}
+
 function buildResultSummary(stats, make) {
 	const root = make('div', 'playstyle-summary');
-	const sorted = (keys) => keys
-		.filter(key => stats[key]?.opportunities > 0)
-		.sort((a, b) => stats[b].rankScore - stats[a].rankScore || stats[b].percent - stats[a].percent);
-	const available = keys => sorted(keys)[0] || null;
-	const note = (heading, label, description) => {
-		const section = make('section', 'group');
-		section.append(
-			make('h3', '', heading),
-			make('strong', '', label),
-			make('p', 'hint', description)
+
+	// top 3 per group by the scoring's own ranking; anything tied for first is always included
+	const SEP = ' \u2022 ';
+	const top = (table) => {
+		const ranked = Object.keys(table)
+			.filter(key => stats[key]?.opportunities > 0)
+			.sort((x, y) => stats[y].rankScore - stats[x].rankScore || stats[y].percent - stats[x].percent);
+
+		if (!ranked.length) return { lead: [], rest: [] };
+
+		const first = stats[ranked[0]];
+		const same = (n, m) => Math.abs(n - m) < 0.01;
+
+		const lead = ranked.filter(key =>
+			same(stats[key].rankScore, first.rankScore) &&
+			same(stats[key].percent, first.percent)
 		);
+
+		const rest = ranked.slice(lead.length, Math.max(3, lead.length));
+
+		return { lead, rest };
+	};
+
+	const show = (heading, table) => {
+		const { lead, rest } = top(table);
+		const section = make('section', 'group');
+		section.append(make('h3', '', heading));
+
+		if (!lead.length) {
+			section.append(
+				make('strong', '', 'Not enough info yet'),
+				make('p', 'hint', 'Answer a few more questions to see this one.')
+			);
+			root.append(section);
+			return;
+		}
+
+		const text = key => `${table[key][0]} \u00b7 ${Math.round(stats[key].percent)}%`;
+
+		const line = make('div', 'result-line');
+		line.append(make('strong', '', lead.map(text).join(SEP)));
+
+		if (rest.length) {
+			line.append(make('span', 'result-others', SEP + rest.map(text).join(SEP)));
+		}
+
+		section.append(line);
+
+		for (const key of lead) {
+			section.append(make('p', 'hint', table[key][1]));
+		}
+
 		root.append(section);
 	};
+
 	const strategy = {
-		aggro: ['The Go-Getter', 'You like getting started and making things happen.'],
-		midrange: ['The Builder', 'You like making steady progress and getting stronger as you go.'],
-		control: ['The Planner', 'You like thinking ahead and having an answer when things change.'],
-		combo: ['The Puzzle Solver', 'You like putting pieces together and seeing a plan work out.']
+		aggro: ['Aggro', 'You like getting started fast and making things happen.'],
+		midrange: ['Midrange', 'You like making steady progress and getting stronger as you go.'],
+		control: ['Control', 'You like thinking ahead and having an answer when things change.'],
+		combo: ['Combo', 'You like putting pieces together and seeing a plan work out.']
 	};
+
+	const mechanics = {
+		stompy: ['Big creatures', 'You like big creatures that win fights.'],
+		tokens: ['Lots of small creatures', 'You like filling the board with a big team.'],
+		counters: ['Growing things', 'You like watching your stuff get bigger over time.'],
+		voltron: ['One main character', 'You like putting everything into one creature.'],
+		graveyard: ['Second chances', 'You like bringing things back from the graveyard.'],
+		sacrifice: ['Trading things for rewards', 'You like giving things up to get something better.'],
+		spellslinger: ['Casting lots of spells', 'You like chaining spells together.'],
+		artifacts: ['Artifacts', 'You like clever gadgets doing their thing.'],
+		enchantments: ['Lasting effects', 'You like cards that stay out and change the rules.'],
+		politics: ['Making deals', 'You like talking and trading favors with the table.'],
+		disruption: ['Getting in the way', 'You like messing with what other people are trying to do.'],
+		theft: ['Borrowing tricks', "You like using other people's stuff against them."],
+		typal: ['A matching team', 'You like a team of creatures that are all the same kind.'],
+		lifegain: ['Gaining life', 'You like staying healthy and hard to kill.'],
+		landfall: ['Playing lands', 'You like getting rewarded every time you play a land.'],
+		blink: ['Reusing abilities', 'You like making creatures leave and come back to use their abilities again.'],
+		value_engine: ['Getting extra value', 'You like cards that keep giving you more.'],
+		synergy: ['Connecting the pieces', 'You like cards that work really well together.']
+	};
+
 	const win = {
-		combat: ['Winning Together', 'You like building up a group and seeing it succeed.'],
-		commander_damage: ['One Big Star', 'You like putting your effort into one standout character.'],
-		life_drain: ['Little by Little', 'You like small advantages that really add up.'],
-		burn: ['A Big Finish', 'You like a direct, exciting finish.'],
-		combo_win: ['The Perfect Combination', 'You like making several things work together at just the right moment.'],
-		attrition: ['Outlasting Everyone', 'You like sticking around and making steady progress.'],
-		mill: ['An Unexpected Route', 'You like finding a different way to get to the finish line.'],
-		alternate_win: ['A Secret Plan', 'You like winning by doing something unusual.']
+		combat: ['Combat', 'You like winning by attacking with your creatures.'],
+		commander_damage: ['Commander damage', 'You like winning by hitting with one standout commander.'],
+		life_drain: ['Life drain', 'You like small advantages that slowly add up.'],
+		burn: ['Burn', 'You like a direct, exciting finish.'],
+		combo_win: ['Combo', 'You like making several things work together at just the right moment.'],
+		attrition: ['Attrition', 'You like outlasting everyone and wearing them down.'],
+		mill: ['Mill', 'You like winning by emptying out their deck.'],
+		alternate_win: ['Alternate win', 'You like winning by doing something unusual.']
 	};
-	const names = {
-		stompy:'Big creatures', tokens:'Making a big team', counters:'Growing things',
-		voltron:'One main character', graveyard:'Second chances', sacrifice:'Trading things for rewards',
-		spellslinger:'Casting lots of spells', artifacts:'Clever gadgets', enchantments:'Lasting effects',
-		politics:'Making deals', disruption:'Changing plans', theft:'Borrowing tricks',
-		typal:'A matching team', lifegain:'Staying healthy', landfall:'Building resources',
-		blink:'Reusing abilities', value_engine:'Getting extra value', synergy:'Connecting the pieces'
+
+	const style = {
+		fast_pace: ['Fast games', 'You like games that move quickly.'],
+		slow_pace: ['Slow games', 'You like games that take their time and build up.'],
+		interaction: ['Interacting a lot', 'You like being in the middle of what everyone else is doing.'],
+		low_interaction: ['Doing your own thing', 'You like focusing on your own plan.'],
+		complexity: ['Lots of moving parts', 'You like having plenty to think about and keep track of.'],
+		low_complexity: ['Keeping it simple', 'You like games that are easy to follow.'],
+		decision_density: ['Lots of choices', 'You like having a decision to make every turn.'],
+		high_risk: ['Taking big risks', 'You like plays that could go really well or really badly.'],
+		low_risk: ['Playing it safe', 'You like steady plays you know will work.'],
+		consistency: ['Reliable games', 'You like decks that do what you expect them to.'],
+		resilience: ['Bouncing back', 'You like coming back after things go wrong.'],
+		adaptability: ['Adapting on the fly', 'You like changing your plan to fit the game.'],
+		burst: ['Big explosive turns', 'You like saving up for one huge turn.'],
+		setup: ['Building up first', 'You like getting set up before the big stuff.'],
+		social: ['Being social', 'You like the table talk as much as the cards.']
 	};
-	const topStrategy = available(Object.keys(strategy));
-	if (topStrategy) note('YOUR MAIN PLAYSTYLE', ...strategy[topStrategy]);
-	else note('YOUR MAIN PLAYSTYLE', 'Still figuring it out', 'Answer a few more questions to see your style.');
 
-	const mechanics = sorted(Object.keys(names));
-	const supported = mechanics.filter(key => stats[key].opportunities >= 2 && stats[key].rankScore >= 55);
-	const favorites = (supported.length ? supported : mechanics).slice(0, 3).map(key => names[key]);
-	note('WHAT YOU ENJOY', favorites.join(' · ') || 'A little of everything',
-		'These are some of the things your answers leaned toward.');
-
-	const topWin = available(Object.keys(win));
-	if (topWin) note('YOUR FAVORITE WAY TO WIN', ...win[topWin]);
-
-	// Each category contributes only if it has actually been measured.
-	// Reverse-scored categories use (100 - score) to represent the opposite direction.
-	function combined(positive, negative) {
-		let sum = 0;
-		let weight = 0;
-		for (const key of positive) {
-			const s = stats[key];
-			if (!s || !s.opportunities) continue;
-			const w = Math.min(1, s.opportunities / 3);
-			sum += s.percent * w;
-			weight += w;
-		}
-		for (const key of negative) {
-			const s = stats[key];
-			if (!s || !s.opportunities) continue;
-			const w = Math.min(1, s.opportunities / 3);
-			sum += (100 - s.percent) * w;
-			weight += w;
-		}
-		return weight ? sum / weight : null;
-	}
-	const pacing = combined(['fast_pace', 'burst'], ['slow_pace', 'setup', 'consistency']);
-	if (pacing === null) note('YOUR PLAYING SPEED', 'A Little of Both', 'There is not enough information to pick a speed yet.');
-	else if (pacing < 40) note('YOUR PLAYING SPEED', 'Slow and Steady', 'You like taking your time and getting ready first.');
-	else if (pacing < 65) note('YOUR PLAYING SPEED', 'A Little of Both', 'You like a mix of planning and jumping right in.');
-	else note('YOUR PLAYING SPEED', 'Full Speed Ahead', 'You like getting started and keeping things moving.');
-
-	const complexity = combined(
-		['complexity', 'decision_density', 'board_complexity', 'engine_complexity'],
-		['low_complexity']
-	);
-	if (complexity === null) note('HOW YOU LIKE YOUR GAMES', 'Still Figuring It Out', 'A few more answers could help here.');
-	else if (complexity < 40) note('HOW YOU LIKE YOUR GAMES', 'Keep It Simple', 'You would rather have fun without too many things to track.');
-	else if (complexity < 65) note('HOW YOU LIKE YOUR GAMES', 'A Little Challenge', 'You like interesting choices without too much homework.');
-	else note('HOW YOU LIKE YOUR GAMES', 'Lots to Figure Out', 'You enjoy having plenty of little decisions and things to keep track of.');
+	show('YOUR LIKELY PLAYSTYLE', strategy);
+	show('WHAT YOU PROBABLY ENJOY', mechanics);
+	show('HOW YOU PROBABLY LIKE TO WIN', win);
+	show('HOW YOU PROBABLY LIKE TO PLAY', style);
 	return root;
 }
 
@@ -712,6 +927,25 @@ function showResults() {
 	) {
 		return render();
 	}
+
+	const optionalIds = history.filter(
+		id => questionById(id).phase === 'optional'
+	);
+
+	if (
+		!completed &&
+		optionalIds.length >= bank.optionalLimit &&
+		optionalIds.every(id => isAnswered(questionById(id)))
+	) {
+		completed = true;
+		save();
+	}
+
+	$('newQuestionBar').classList.add('hidden');
+
+	$('reviewBtn').classList.toggle('hidden', completed);
+	$('reviewCoreBtn').classList.toggle('hidden', !completed);
+	$('reviewOptionalBtn').classList.toggle('hidden', !completed);
 
 	$('quiz').classList.add('hidden');
 	$('results').classList.remove('hidden');
@@ -728,6 +962,17 @@ function showResults() {
 	const target = $('scoreGroups');
 	target.replaceChildren();
 	target.append(buildResultSummary(stats, el));
+
+	if (SHOW_ALL_PERCENTS) {
+		const details = el('details', 'result-details');
+
+		details.append(
+			el('summary', '', 'See Result Details'),
+			buildFullBreakdown(stats)
+		);
+
+		target.append(details);
+	}
 
 	// The detailed 55-category breakdown remains available in admin.
 	const debugPanel = $('debugOutput')?.closest('details');
@@ -801,6 +1046,25 @@ function bind() {
 		render();
 	};
 
+	$('reviewCoreBtn').onclick = () => {
+		current = 0;
+		save();
+		render();
+	};
+
+	$('reviewOptionalBtn').onclick = () => {
+		const first = history.findIndex(
+			id => questionById(id).phase === 'optional'
+		);
+
+		current = first >= 0 ? first : 0;
+		save();
+		render();
+	};
+
+	$('removeBtn').onclick = removeAnswer;
+	$('newQuestionBtn').onclick = newQuestion;
+
 	$('copyBtn').onclick = () => {
 		navigator.clipboard.writeText(
 			JSON.stringify(
@@ -828,6 +1092,9 @@ $('resetBtn').onclick = () => {
 
 	history = [];
 	responses = {};
+	completed = false;
+	retired = [];
+	removed = [];
 	current = 0;
 
 	initialHistory();

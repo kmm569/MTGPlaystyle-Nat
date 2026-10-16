@@ -185,7 +185,7 @@ function contribution(question, response) {
 	if (response === undefined) return out;
 
 	if (question.type === 'scale') {
-		const strength = (Number(response) - 5.5) / 4.5;
+		const strength = (Number(response) <= 5 ? (Number(response) - 5) / 4 : (Number(response) - 5) / 5);
 		add(question.scores, strength);
 
 	} else if (question.type === 'rank') {
@@ -405,22 +405,64 @@ function render() {
 				: `${value} / 10`
 		);
 
+		// whole numbers 1 to 10, but 5 sits dead center on the track
+		// (4 stops on the left, 5 on the right, spaced a little different)
+		const stops = [0, 12.5, 25, 37.5, 50, 60, 70, 80, 90, 100];
+		const rating = pos => stops.indexOf(pos) + 1;
+		const nearest = pos => stops.reduce((best, s) =>
+			Math.abs(s - pos) < Math.abs(best - pos) ? s : best, stops[4]);
+
 		const range = el('input');
 
 		range.type = 'range';
-		range.min = '1';
-		range.max = '10';
-		range.step = '1';
-		range.value = value ?? 5;
+		range.min = '0';
+		range.max = '100';
+		range.step = 'any';
+		range.value = value ? stops[value - 1] : 50;
 
 		range.setAttribute('aria-label', q.question);
+		range.setAttribute('aria-valuemin', '1');
+		range.setAttribute('aria-valuemax', '10');
 
-		range.oninput = () => {
-			responses[q.id] = Number(range.value);
-			label.textContent = `${range.value} / 10`;
+		const commit = (snap) => {
+			const pos = snap ? nearest(Number(range.value)) : Number(range.value);
+			if (snap) range.value = pos;
+
+			const r = rating(nearest(pos));
+			responses[q.id] = r;
+			label.textContent = `${r} / 10`;
+			range.setAttribute('aria-valuenow', r);
 
 			save();
 			$('nextBtn').disabled = false;
+		};
+
+		// while dragging the thumb follows the mouse, then it snaps when let go
+		range.oninput = () => {
+			const r = rating(nearest(Number(range.value)));
+			responses[q.id] = r;
+			label.textContent = `${r} / 10`;
+			save();
+			$('nextBtn').disabled = false;
+		};
+
+		range.onpointerup = () => commit(true);
+		range.onchange = () => commit(true);
+
+		// arrow keys jump one number at a time
+		range.onkeydown = (e) => {
+			const now = stops.indexOf(nearest(Number(range.value)));
+			let next = null;
+
+			if (e.key === 'ArrowRight' || e.key === 'ArrowUp') next = Math.min(9, now + 1);
+			if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') next = Math.max(0, now - 1);
+			if (e.key === 'Home') next = 0;
+			if (e.key === 'End') next = 9;
+			if (next === null) return;
+
+			e.preventDefault();
+			range.value = stops[next];
+			commit(false);
 		};
 
 		const ends = el('div', 'scale-ends');
